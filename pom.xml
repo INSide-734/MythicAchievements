@@ -1,19 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
   	<groupId>io.lumine</groupId>
-  	<artifactId>MCCosmetics-Plugin</artifactId>
-  	<version>${mccosmetics.version}</version>
-  	<name>MCCosmetics</name>
-  	<description>A plugin for creating insane cosmetics.</description>
+  	<artifactId>MythicAchievements-Plugin</artifactId>
+  	<version>${mythicachievements.version}</version>
+  	<name>MythicAchievements</name>
+  	<description>A plugin for creating custom advancements.</description>
   	<url>https://www.mythiccraft.io</url>
   	<packaging>pom</packaging>
     <organization>
         <name>Lumine LLC</name>
         <url>https://www.lumine.io</url>
-    </organization>  
+    </organization>
   
 	<properties>  
-	    <mccosmetics.version>0.6.0</mccosmetics.version>
+	    <mythicachievements.version>0.0.1-SNAPSHOT</mythicachievements.version>
 	    <paperapi.version>1.19-R0.1-SNAPSHOT</paperapi.version>
 	    <lumineutils.version>1.18-SNAPSHOT</lumineutils.version>
 	    <lombok.version>1.18.22</lombok.version>
@@ -31,12 +31,8 @@
 	<modules>
 	    <module>api</module>
         <module>plugin</module>
-		<module>v1_17_R1</module>
-		<module>v1_18_R1</module>
-        <module>v1_18_R2</module>
         <module>v1_19_R1</module>
         <module>dist</module>
-        <module>dist-premium</module>
 	</modules>
  
   	<distributionManagement>

@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
-    <name>MCCosmetics-API</name>
-    <artifactId>MCCosmetics-API</artifactId>
+    <name>MythicAchievements-API</name>
+    <artifactId>MythicAchievements-API</artifactId>
     <parent>
         <groupId>io.lumine</groupId>
-        <artifactId>MCCosmetics-Plugin</artifactId>
-        <version>${mccosmetics.version}</version>
+        <artifactId>MythicAchievements-Plugin</artifactId>
+        <version>${mythicachievements.version}</version>
     </parent>  
     
     <build>
@@ -17,7 +17,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <finalName>MCCosmetics-API-${project.parent.version}</finalName>
+                    <finalName>MythicAchievements-API-${project.parent.version}</finalName>
                     <outputDirectory>${ticxo.build.location}</outputDirectory>
                 </configuration>
             </plugin>

@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>MCCosmetics-Dist</artifactId>
-    <parent>
+    <artifactId>MythicAchievements-Dist</artifactId>
+    <parent> 
         <groupId>io.lumine</groupId>
-        <artifactId>MCCosmetics-Plugin</artifactId>
-        <version>${mccosmetics.version}</version>
+        <artifactId>MythicAchievements-Plugin</artifactId>
+        <version>${mythicachievements.version}</version>
     </parent>  
  
     <pluginRepositories>
@@ -29,32 +29,14 @@
         </dependency>
         <dependency>
             <groupId>io.lumine</groupId>
-            <artifactId>MCCosmetics</artifactId>
+            <artifactId>MythicAchievements</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>io.lumine</groupId>
-            <artifactId>MCCosmetics-v1_17_R1</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.lumine</groupId>
-            <artifactId>MCCosmetics-v1_18_R1</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.lumine</groupId>
-            <artifactId>MCCosmetics-v1_18_R2</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.lumine</groupId>
-            <artifactId>MCCosmetics-v1_19_R1</artifactId>
+            <artifactId>MythicAchievements-v1_19_R1</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
@@ -99,7 +81,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <finalName>MCCosmetics-${project.parent.version}</finalName>
+                    <finalName>MythicAchievements-${project.parent.version}</finalName>
                     <outputDirectory>${ticxo.build.location}</outputDirectory>
                 </configuration>
             </plugin>

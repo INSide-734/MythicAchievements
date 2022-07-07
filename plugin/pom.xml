@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>MCCosmetics</artifactId>
+    <artifactId>MythicAchievements</artifactId>
 
-    <name>MCCosmetics</name> 
+    <name>MythicAchievements</name> 
     <description>A plugin for creating insane cosmetics.</description>
     <parent>
         <groupId>io.lumine</groupId>
-        <artifactId>MCCosmetics-Plugin</artifactId>
-        <version>${mccosmetics.version}</version>
+        <artifactId>MythicAchievements-Plugin</artifactId>
+        <version>${mythicachievements.version}</version>
     </parent> 
 
     <build>
@@ -162,8 +162,8 @@
         </dependency>
         <dependency>
             <groupId>io.lumine</groupId>
-            <artifactId>MCCosmetics-API</artifactId>
-            <version>0.6.0-SNAPSHOT</version>
+            <artifactId>MythicAchievements-API</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope> 
         </dependency>
         <dependency>
@@ -177,17 +177,6 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ticxo.modelengine</groupId>
-            <artifactId>api</artifactId>
-            <version>R2.5.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ticxo.playeranimator</groupId>
-            <artifactId>PlayerAnimator</artifactId>
-            <version>R1.2.2</version>
         </dependency>
 
         <!-- Spigot API -->
@@ -225,25 +214,13 @@
         <dependency>
             <groupId>io.lumine</groupId>
             <artifactId>Mythic-Dist</artifactId>
-            <version>5.0.3-SNAPSHOT</version>
+            <version>5.1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.lumine</groupId>
             <artifactId>LumineCore</artifactId>
             <version>1.18-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>fr.nocsy</groupId>
-            <artifactId>mcpets</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>LibsDisguises</groupId>
-            <artifactId>LibsDisguises</artifactId>
-            <version>10.0.24</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
