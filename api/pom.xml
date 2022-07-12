@@ -70,8 +70,8 @@
         <!-- Main dependencies -->
         <dependency>
             <groupId>io.lumine</groupId>
-            <artifactId>LumineUtils</artifactId>
-            <version>${lumineutils.version}</version>
+            <artifactId>Mythic-Dist</artifactId>
+            <version>${mythic.version}</version>
             <scope>provided</scope> 
         </dependency>
         <dependency> 

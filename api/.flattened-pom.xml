@@ -8,8 +8,8 @@
   <dependencies>
     <dependency>
       <groupId>io.lumine</groupId>
-      <artifactId>LumineUtils</artifactId>
-      <version>1.18-SNAPSHOT</version>
+      <artifactId>Mythic-Dist</artifactId>
+      <version>5.1.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

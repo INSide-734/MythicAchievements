@@ -17,18 +17,6 @@
     <dependencies>
         <dependency>
             <groupId>io.lumine</groupId>
-            <artifactId>LumineUtils</artifactId>
-            <version>${lumineutils.version}</version>
-            <scope>compile</scope> 
-            <exclusions>
-                <exclusion>
-                    <artifactId>*</artifactId>
-                    <groupId>*</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.lumine</groupId>
             <artifactId>MythicAchievements</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
@@ -60,14 +48,6 @@
                                 <relocation>
                                     <pattern>org.bstats</pattern>
                                     <shadedPattern>io.lumine.cosmetics.metrics</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>io.lumine.utils</pattern>
-                                    <shadedPattern>io.lumine.cosmetics.utils</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.ticxo.playeranimator</pattern>
-                                    <shadedPattern>io.lumine.cosmetics.playeranimator</shadedPattern>
                                 </relocation>
                             </relocations>
                             <minimizeJar>false</minimizeJar>

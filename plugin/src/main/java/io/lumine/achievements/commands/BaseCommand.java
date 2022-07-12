@@ -2,7 +2,7 @@ package io.lumine.achievements.commands;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.constants.Permissions;
-import io.lumine.utils.commands.Command;
+import io.lumine.mythic.bukkit.utils.commands.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -24,7 +24,7 @@ public class BaseCommand extends Command<MythicAchievementsPlugin> {
             throw new IllegalStateException("This should never happen, please report to the developers.");
         }
         
-        //getPlugin().getMenuManager().getAchievementsMenu().open(player);
+        getPlugin().getMenuManager().getCategoriesMenu().openMenu(player);
         return true;
     }
 

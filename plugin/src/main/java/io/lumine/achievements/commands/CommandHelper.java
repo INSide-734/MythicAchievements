@@ -1,10 +1,10 @@
 package io.lumine.achievements.commands;
 
 import io.lumine.achievements.config.Scope;
-import io.lumine.utils.adventure.text.Component;
-import io.lumine.utils.config.properties.Property;
-import io.lumine.utils.config.properties.types.StringProp;
-import io.lumine.utils.text.Text;
+import io.lumine.mythic.bukkit.utils.adventure.text.Component;
+import io.lumine.mythic.bukkit.utils.config.properties.Property;
+import io.lumine.mythic.bukkit.utils.config.properties.types.StringProp;
+import io.lumine.mythic.bukkit.utils.text.Text;
 import org.bukkit.command.CommandSender;
 
 public class CommandHelper {

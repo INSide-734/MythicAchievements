@@ -1,7 +1,7 @@
 package io.lumine.achievements.logging;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
-import io.lumine.utils.logging.ConsoleColor;
+import io.lumine.mythic.bukkit.utils.logging.ConsoleColor;
 
 import java.util.logging.Level;
 

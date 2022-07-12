@@ -168,8 +168,8 @@
         </dependency>
         <dependency>
             <groupId>io.lumine</groupId>
-            <artifactId>LumineUtils</artifactId>
-            <version>${lumineutils.version}</version>
+            <artifactId>Mythic-Dist</artifactId>
+            <version>${mythic.version}</version>
             <scope>provided</scope> 
         </dependency>
         <dependency> 
@@ -211,12 +211,6 @@
         </dependency>
 
         <!-- Compatibility -->
-        <dependency>
-            <groupId>io.lumine</groupId>
-            <artifactId>Mythic-Dist</artifactId>
-            <version>5.1.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>io.lumine</groupId>
             <artifactId>LumineCore</artifactId>

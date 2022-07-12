@@ -4,9 +4,9 @@ import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.commands.CommandHelper;
 import io.lumine.achievements.constants.Permissions;
 import io.lumine.achievements.nms.VolatileCodeDisabled;
-import io.lumine.utils.chat.ColorString;
-import io.lumine.utils.commands.Command;
-import io.lumine.utils.version.ServerVersion;
+import io.lumine.mythic.bukkit.utils.chat.ColorString;
+import io.lumine.mythic.bukkit.utils.commands.Command;
+import io.lumine.mythic.bukkit.utils.version.ServerVersion;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

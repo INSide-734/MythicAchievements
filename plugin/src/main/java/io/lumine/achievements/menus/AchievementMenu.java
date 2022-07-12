@@ -5,9 +5,9 @@ import org.bukkit.entity.Player;
 import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.api.MythicAchievements;
 import io.lumine.achievements.players.Profile;
-import io.lumine.utils.config.properties.types.MenuProp;
-import io.lumine.utils.menu.EditableMenuBuilder;
-import io.lumine.utils.menu.ReloadableMenu;
+import io.lumine.mythic.bukkit.utils.config.properties.types.MenuProp;
+import io.lumine.mythic.bukkit.utils.menu.EditableMenuBuilder;
+import io.lumine.mythic.bukkit.utils.menu.ReloadableMenu;
 import lombok.Getter;
 
 public abstract class AchievementMenu<T> extends ReloadableMenu<T> {

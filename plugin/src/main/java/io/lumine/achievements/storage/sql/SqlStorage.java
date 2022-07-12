@@ -2,9 +2,9 @@ package io.lumine.achievements.storage.sql;
 
 import java.util.UUID;
 
-import io.lumine.utils.promise.Promise;
-import io.lumine.utils.storage.players.Profile;
-import io.lumine.utils.storage.players.adapters.SqlPlayerStorageAdapter;
+import io.lumine.mythic.bukkit.utils.promise.Promise;
+import io.lumine.mythic.bukkit.utils.storage.players.Profile;
+import io.lumine.mythic.bukkit.utils.storage.players.adapters.SqlPlayerStorageAdapter;
 
 public class SqlStorage implements SqlPlayerStorageAdapter {
 

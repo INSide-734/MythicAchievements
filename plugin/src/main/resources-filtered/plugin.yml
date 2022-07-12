@@ -1,38 +1,27 @@
-name: MCCosmetics
-author: Lumine & MCModels
-main: io.lumine.cosmetics.MCCosmeticsPlugin
+name: MythicAchievements
+author: Lumine
+main: io.lumine.achievements.MythicAchievementsPlugin
 version: ${project.version}-${build.number}
 api-version: 1.13
-depend: []
-softdepend:
-- ModelEngine
+depend:
 - MythicMobs
-- Vault
-- LibsDisguises
+softdepend:
+- MythicMobs
 - PlaceholderAPI
 - WorldGuard
 loadbefore: []
 description: The total solution for all things mob-related.
 commands:
-  mccosmetics:
-    description: MCCosmetics admin command
-    aliases: [mcc]
-  cosmetics:
-    description: MCCosmetics user command
-    aliases: [cosmetic]
-  sprays:
-    description: Open the sprays menu
-    aliases: []
-  spray:
-    description: Use your equipped spray
-    aliases: [s]
-  emote:
-    description: Use your equipped emote
-    aliases: [emotes, e]
+  mythicachievements:
+    description: MythicAchievements admin command
+    aliases: [mach]
+  achievements:
+    description: MythicAchievements user command
+    aliases: [achieve]
 permissions:
-  mccosmetics.admin.command:
+  mythicachievements.admin.command:
     description: Gives access to the base admin commands
     default: op
-  mccosmetics.admin.command.reload:
-    description: Gives access /mccosmetics reload!
+  mythicachievements.admin.command.reload:
+    description: Gives access /mythicachievements reload!
     default: op

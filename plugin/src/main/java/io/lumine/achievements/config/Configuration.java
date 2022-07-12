@@ -4,12 +4,12 @@ import com.google.common.collect.Lists;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.storage.StorageDriver;
-import io.lumine.utils.config.properties.Property;
-import io.lumine.utils.config.properties.PropertyHolder;
-import io.lumine.utils.config.properties.types.EnumProp;
-import io.lumine.utils.config.properties.types.IntProp;
-import io.lumine.utils.logging.Log;
-import io.lumine.utils.plugin.ReloadableModule;
+import io.lumine.mythic.bukkit.utils.config.properties.Property;
+import io.lumine.mythic.bukkit.utils.config.properties.PropertyHolder;
+import io.lumine.mythic.bukkit.utils.config.properties.types.EnumProp;
+import io.lumine.mythic.bukkit.utils.config.properties.types.IntProp;
+import io.lumine.mythic.bukkit.utils.logging.Log;
+import io.lumine.mythic.bukkit.utils.plugin.ReloadableModule;
 import lombok.Getter;
 
 import java.io.File;

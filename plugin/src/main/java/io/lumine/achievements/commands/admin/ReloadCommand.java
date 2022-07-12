@@ -4,8 +4,8 @@ import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.commands.CommandHelper;
 import io.lumine.achievements.config.Scope;
 import io.lumine.achievements.constants.Permissions;
-import io.lumine.utils.commands.Command;
-import io.lumine.utils.config.properties.Property;
+import io.lumine.mythic.bukkit.utils.commands.Command;
+import io.lumine.mythic.bukkit.utils.config.properties.Property;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;

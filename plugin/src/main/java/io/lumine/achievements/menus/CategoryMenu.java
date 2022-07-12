@@ -7,16 +7,15 @@ import org.bukkit.entity.Player;
 import com.google.common.collect.Lists;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
-import io.lumine.achievements.api.achievements.Achievement;
 import io.lumine.achievements.api.achievements.AchievementCategory;
 import io.lumine.achievements.players.Profile;
 import io.lumine.mythic.bukkit.utils.config.properties.types.MenuProp;
 import io.lumine.mythic.bukkit.utils.menu.EditableMenuBuilder;
 
-public class AchievementsMenu extends AchievementMenu<Profile> {
+public class CategoryMenu extends AchievementMenu<Profile> {
 
-    public AchievementsMenu(MythicAchievementsPlugin core, MenuManager manager) {
-        super(core, manager, new MenuProp(core, "menus/achievements", "Menu", null));
+    public CategoryMenu(MythicAchievementsPlugin core, MenuManager manager) {
+        super(core, manager, new MenuProp(core, "menus/categories", "Menu", null));
     }
 
     @Override
@@ -24,12 +23,13 @@ public class AchievementsMenu extends AchievementMenu<Profile> {
 
         return builder;
     }
-
-    public void openMenu(Player player, AchievementCategory category) {
+    
+    public void openMenu(Player player) {
         var profile = plugin.getProfiles().getProfile(player);
         
-        List<Achievement> categories = category.getAchievements();
+        List<AchievementCategory> categories = Lists.newArrayList(getPlugin().getAchievementManager().getCategories());
         
         this.open(player, profile, categories);
     }
+
 }

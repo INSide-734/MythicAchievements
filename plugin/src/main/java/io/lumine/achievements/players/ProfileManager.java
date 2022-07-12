@@ -1,10 +1,10 @@
 package io.lumine.achievements.players;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
-import io.lumine.utils.Events;
-import io.lumine.utils.logging.Log;
-import io.lumine.utils.storage.players.PlayerRepository;
-import io.lumine.utils.storage.players.adapters.file.JsonPlayerStorageAdapter;
+import io.lumine.mythic.bukkit.utils.Events;
+import io.lumine.mythic.bukkit.utils.logging.Log;
+import io.lumine.mythic.bukkit.utils.storage.players.PlayerRepository;
+import io.lumine.mythic.bukkit.utils.storage.players.adapters.file.JsonPlayerStorageAdapter;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
@@ -35,7 +35,7 @@ public class ProfileManager extends PlayerRepository<MythicAchievementsPlugin,Pr
 
     @Override
     public void initProfile(Profile profile, Player player) {
-        profile.initialize(player);
+        profile.initialize(this,player);
         //Events.call(new AchivementPlayerLoadedEvent(player,profile));
     }
 
@@ -43,7 +43,7 @@ public class ProfileManager extends PlayerRepository<MythicAchievementsPlugin,Pr
     public void unloadProfile(Profile profile, Player player) {}
 
     public void reloadAllAchievements() {
-        //this.getKnownProfiles().forEach(profile -> profile.reloadAchievements());
+        this.getKnownProfiles().forEach(profile -> profile.rebuildAchievements());
     }
 
 }

@@ -1,11 +1,12 @@
 package io.lumine.achievements.config;
 
-import io.lumine.utils.config.properties.PropertyScope;
+import io.lumine.mythic.bukkit.utils.config.properties.PropertyScope;
 
 public enum Scope implements PropertyScope {
     
     NONE(""),
     CONFIG("config"),
+    CATEGORIES("categories"),
 	;
     
 	private final String scope;

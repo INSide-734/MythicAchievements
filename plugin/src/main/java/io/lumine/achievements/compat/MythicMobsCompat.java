@@ -4,7 +4,7 @@ import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.compat.mythicmobs.CosmeticEmoteMechanic;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
-import io.lumine.utils.Events;
+import io.lumine.mythic.bukkit.utils.Events;
 
 
 import java.util.Locale;

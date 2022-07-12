@@ -6,9 +6,9 @@ import io.lumine.core.LumineCore;
 import io.lumine.core.players.PlayerProfile;
 import io.lumine.core.utils.gson.GsonProvider;
 import io.lumine.core.utils.logging.Log;
-import io.lumine.utils.plugin.PluginModule;
-import io.lumine.utils.promise.Promise;
-import io.lumine.utils.storage.players.PlayerStorageAdapter;
+import io.lumine.mythic.bukkit.utils.plugin.PluginModule;
+import io.lumine.mythic.bukkit.utils.promise.Promise;
+import io.lumine.mythic.bukkit.utils.storage.players.PlayerStorageAdapter;
 
 import java.io.File;
 import java.io.FileWriter;

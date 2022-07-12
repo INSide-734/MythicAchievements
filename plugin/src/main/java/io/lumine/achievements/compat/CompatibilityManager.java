@@ -1,8 +1,8 @@
 package io.lumine.achievements.compat;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
-import io.lumine.utils.logging.Log;
-import io.lumine.utils.plugin.ReloadableModule;
+import io.lumine.mythic.bukkit.utils.logging.Log;
+import io.lumine.mythic.bukkit.utils.plugin.ReloadableModule;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 

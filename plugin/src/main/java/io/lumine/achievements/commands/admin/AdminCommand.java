@@ -3,9 +3,9 @@ package io.lumine.achievements.commands.admin;
 import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.commands.CommandHelper;
 import io.lumine.achievements.constants.Permissions;
-import io.lumine.utils.adventure.text.Component;
-import io.lumine.utils.commands.Command;
-import io.lumine.utils.text.Text;
+import io.lumine.mythic.bukkit.utils.adventure.text.Component;
+import io.lumine.mythic.bukkit.utils.commands.Command;
+import io.lumine.mythic.bukkit.utils.text.Text;
 
 import org.bukkit.command.CommandSender;
 

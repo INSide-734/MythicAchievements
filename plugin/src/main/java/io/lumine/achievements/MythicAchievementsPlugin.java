@@ -1,5 +1,6 @@
 package io.lumine.achievements;
 
+import io.lumine.achievements.achievement.AchievementsExecutor;
 import io.lumine.achievements.commands.BaseCommand;
 import io.lumine.achievements.commands.admin.AdminCommand;
 import io.lumine.achievements.compat.CompatibilityManager;
@@ -7,17 +8,16 @@ import io.lumine.achievements.compat.WorldGuardSupport;
 import io.lumine.achievements.config.Configuration;
 import io.lumine.achievements.listeners.PlayerListeners;
 import io.lumine.achievements.logging.MCLogger;
-import io.lumine.achievements.managers.AchievementsExecutor;
 import io.lumine.achievements.menus.MenuManager;
 import io.lumine.achievements.metrics.bStats;
 import io.lumine.achievements.nms.VolatileCodeDisabled;
 import io.lumine.achievements.nms.VolatileCodeHandler;
 import io.lumine.achievements.players.ProfileManager;
-import io.lumine.utils.chat.ColorString;
-import io.lumine.utils.logging.ConsoleColor;
-import io.lumine.utils.logging.Log;
-import io.lumine.utils.plugin.LuminePlugin;
-import io.lumine.utils.version.ServerVersion;
+import io.lumine.mythic.bukkit.utils.chat.ColorString;
+import io.lumine.mythic.bukkit.utils.logging.ConsoleColor;
+import io.lumine.mythic.bukkit.utils.logging.Log;
+import io.lumine.mythic.bukkit.utils.plugin.LuminePlugin;
+import io.lumine.mythic.bukkit.utils.version.ServerVersion;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 
@@ -35,7 +35,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
     @Getter private BaseCommand baseCommand;
     @Getter private AdminCommand adminCommand;
     
-    @Getter private AchievementsExecutor cosmetics;
+    @Getter private AchievementsExecutor achievementManager;
 
     private VolatileCodeHandler volatileCodeHandler;
 
@@ -88,7 +88,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
         volatileCodeHandler = getVolatileCodeHandler();
         compatibility = new CompatibilityManager(this);
         
-        cosmetics = new AchievementsExecutor(this);
+        achievementManager = new AchievementsExecutor(this);
         
         profiles = new ProfileManager(this);
         
