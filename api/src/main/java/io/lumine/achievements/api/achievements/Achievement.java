@@ -1,6 +1,7 @@
 package io.lumine.achievements.api.achievements;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Optional;
 
 import org.bukkit.entity.Player;
@@ -23,13 +24,15 @@ public abstract class Achievement implements PropertyHolder,MenuData<Achievement
 
     public abstract File getFile();
     
-    public boolean has(AchievementProfile profile) {
-        return profile.has(this);
+    public boolean hasCompleted(AchievementProfile profile) {
+        return profile.hasCompleted(this);
     }
     
     public abstract AchievementCriteria getCriteria();
     
     public abstract Optional<Achievement> getParent();
+    
+    public abstract Collection<Achievement> getChildren();
     
     public boolean hasParent() {
         return getParent().isPresent();

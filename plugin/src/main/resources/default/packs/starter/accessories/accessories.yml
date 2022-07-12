@@ -1,8 +1,0 @@
-paladin_wings:
-  Display: "&dPaladin Wings"
-  Description:
-    - "&fCreated by Samus2002"
-  ModelId: "paladin_wings"
-  State: "idle"
-  Offset: 0, 0.5, -0.15, 0, 0
-  Anchor: BODY

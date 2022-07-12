@@ -22,6 +22,7 @@ import io.lumine.achievements.api.achievements.manager.AchievementManager;
 import io.lumine.achievements.api.players.AchievementProfile;
 import io.lumine.achievements.config.Scope;
 import io.lumine.achievements.players.Profile;
+import io.lumine.core.util.FireworkUtil;
 import io.lumine.mythic.core.drops.DropTable;
 import io.lumine.mythic.bukkit.utils.config.properties.Property;
 import io.lumine.mythic.bukkit.utils.config.properties.types.BooleanProp;
@@ -73,6 +74,7 @@ public class AchievementImpl extends Achievement {
     
     @Getter private AchievementCategory category;
     @Getter private Optional<Achievement> parent = Optional.empty();
+    @Getter private Collection<Achievement> children = Lists.newArrayList();
     @Getter private AchievementCriteria criteria;
     
     protected Material iconMaterial;
@@ -117,6 +119,7 @@ public class AchievementImpl extends Achievement {
                 return false;
             }
             this.parent = maybeParent;
+            this.parent.get().getChildren().add(this);
         }
         
         var maybeCriteria = getManager().getCriteria(this,criteriaType);
@@ -155,6 +158,7 @@ public class AchievementImpl extends Achievement {
 
     @Override
     public void sendCompletedMessage(Player player) {
+        player.sendTitle("", Text.colorize("<green>Achievement Completed"), 0, 20, 20);
         Text.sendMessage(player, "achievement completed");
     }
     
@@ -168,16 +172,30 @@ public class AchievementImpl extends Achievement {
                 .name(Text.colorize(this.getDisplay()))
                 .itemStack(this.menuItem)
                 .hideFlags()
+                .blink((prof,player) -> {
+                    if(prof.hasCompleted(this) && !prof.hasCollectedReward(this)) {
+                        return ItemFactory.of(Material.AIR);
+                    } else {
+                        return null;
+                    }
+                })
                 .lore(prof -> {
                     List<String> desc = Lists.newArrayList(goal);
-                    if(!prof.has(this)) {
+                    if(!prof.hasCompleted(this)) {
                         desc.add("");
-                        desc.add(Text.colorizeLegacy("<red>Not Unlocked"));
+                        desc.add(Text.colorizeLegacy("<red>Not Completed"));
+                    } else {
+                        desc.add("");
+                        desc.add(Text.colorizeLegacy("<green><bold>Completed"));
                     }
                     return desc; 
                 })
                 .click((prof,player) -> {
-
+                    if(prof.hasCompleted(this) && !prof.hasCollectedReward(this)) {
+                        player.playSound(player.getLocation(), "entity.experience_orb.pickup", 1, 1);
+                        prof.setRewardsCollected(this);
+                        giveRewards(player);
+                    }
                 }).build();
     }
     

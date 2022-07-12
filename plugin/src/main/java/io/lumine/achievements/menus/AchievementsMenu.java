@@ -11,6 +11,7 @@ import io.lumine.achievements.api.achievements.Achievement;
 import io.lumine.achievements.api.achievements.AchievementCategory;
 import io.lumine.achievements.players.Profile;
 import io.lumine.mythic.bukkit.utils.config.properties.types.MenuProp;
+import io.lumine.mythic.bukkit.utils.logging.Log;
 import io.lumine.mythic.bukkit.utils.menu.EditableMenuBuilder;
 
 public class AchievementsMenu extends AchievementMenu<Profile> {
@@ -28,8 +29,8 @@ public class AchievementsMenu extends AchievementMenu<Profile> {
     public void openMenu(Player player, AchievementCategory category) {
         var profile = plugin.getProfiles().getProfile(player);
         
-        List<Achievement> categories = category.getAchievements();
-        
-        this.open(player, profile, categories);
+        List<Achievement> achieves = category.getAchievements();
+        Log.info("Opening menu with {0} achievements", achieves.size());
+        this.open(player, profile, achieves);
     }
 }

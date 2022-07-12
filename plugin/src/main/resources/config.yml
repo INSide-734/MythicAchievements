@@ -1,18 +1,3 @@
 Configuration:
   Storage:
     Driver: JSON
-  Sprays:
-    Sound: 'entity.cat.hiss'
-    Volume: 1.0
-    Pitch: 2.0
-    ReplaceLast: true
-    PersistTime: 60
-  Menus:
-    Close-On-Unequip: false
-  Language:
-    Command-Header: "<yellow><strikethrough>------------<gold>=====</strikethrough> <bold><gradient:#dc0c1f:#ed858f>MCCosmetics</gradient></bold> <strikethrough><gold>=====<yellow>------------</strikethrough>"
-    Command-Footer: "<yellow><strikethrough>--------------------------------------</strikethrough>"
-    Command-Prefix: "<bold><white>[<#dc0c1f>MCCosmetics<white>]</bold> "
-    Reloaded: "<green>MCCosmetics has been reloaded."
-    Spray-Not-Found: "<bold><red>Spray not found!</red></bold>"
-    Cosmetic-Not-Unlocked: "<bold><red>You haven't unlocked that cosmetic!"

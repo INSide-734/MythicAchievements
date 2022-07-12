@@ -16,12 +16,12 @@ import lombok.Getter;
 
 public class AchievementCategoryImpl implements AchievementCategory {
 
-    @Getter private final AchievementManager manager;
+    @Getter private final AchievementsExecutor manager;
     @Getter private final String key;
     
     public List<Achievement> achievements = Lists.newArrayList();
     
-    public AchievementCategoryImpl(AchievementManager manager, String key) {
+    public AchievementCategoryImpl(AchievementsExecutor manager, String key) {
         this.manager = manager;
         this.key = key;
     }
@@ -33,7 +33,14 @@ public class AchievementCategoryImpl implements AchievementCategory {
 
     @Override
     public Icon<AchievementProfile> getIcon() {
-        return IconBuilder.<AchievementProfile>create().material(Material.NETHER_STAR).name(key).build();
+        return IconBuilder.<AchievementProfile>create()
+                .material(Material.NETHER_STAR)
+                .name(key)
+                .click((prof,player) -> {
+                
+                    manager.getPlugin().getMenuManager().getAchievementsMenu().openMenu(player, this);
+                    
+                }).build();
     }
     
     public List<Achievement> getAchievements() {

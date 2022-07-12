@@ -13,6 +13,10 @@ public interface AchievementProfile {
     
     public Player getPlayer();
     
-    public boolean has(Achievement achievement);
+    public boolean hasCompleted(Achievement achievement);
+    
+    public boolean hasCollectedReward(Achievement achieve);
+    
+    public void setRewardsCollected(Achievement achieve);
 
 }
