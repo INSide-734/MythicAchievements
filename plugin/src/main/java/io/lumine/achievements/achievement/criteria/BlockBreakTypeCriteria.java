@@ -12,14 +12,14 @@ import io.lumine.mythic.bukkit.utils.config.properties.Property;
 import io.lumine.mythic.bukkit.utils.config.properties.types.StringProp;
 import io.lumine.mythic.bukkit.utils.menu.Icon;
 
-public class BlockBreakCriteria extends Criteria {
+public class BlockBreakTypeCriteria extends Criteria {
 
     private final StringProp BLOCK_TYPE = Property.String(Scope.NONE, "Block");
     
     private final String blockType;
     private final Material block;
     
-    public BlockBreakCriteria(Achievement holder) {
+    public BlockBreakTypeCriteria(Achievement holder) {
         super(holder);
         
         this.blockType = BLOCK_TYPE.fget(holder.getFile(), this);
@@ -31,20 +31,16 @@ public class BlockBreakCriteria extends Criteria {
             .handler(event -> {
                 final var player = event.getPlayer();
                 
-                incrementStat(player);
+                if(checkConditions(player)) {
+                    incrementStat(player);
+                }
             })
             .bindWith(this);
     }
 
-    
-    
-    
     @Override
     public Icon<AchievementProfile> getIcon() {
-        // TODO Auto-generated method stub
         return null;
     }
-
-
 
 }

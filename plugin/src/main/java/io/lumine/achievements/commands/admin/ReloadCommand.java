@@ -22,6 +22,8 @@ public class ReloadCommand extends Command<MythicAchievementsPlugin> {
         getPlugin().reloadConfiguration();
 
         getPlugin().getMenuManager().reload();
+        getPlugin().getAchievementManager().reload();
+        
         CommandHelper.sendSuccess(sender, Property.String(Scope.CONFIG,
                 "Configuration.Language.Reloaded","MythicAchievements has been reloaded.").get());
         return true;

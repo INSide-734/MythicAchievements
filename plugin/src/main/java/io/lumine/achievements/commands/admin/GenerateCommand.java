@@ -1,41 +1,37 @@
 package io.lumine.achievements.commands.admin;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
+import io.lumine.achievements.achievement.AchievementsExecutor;
 import io.lumine.achievements.commands.CommandHelper;
 import io.lumine.achievements.constants.Permissions;
-import io.lumine.mythic.bukkit.utils.adventure.text.Component;
+import io.lumine.achievements.nms.VolatileCodeDisabled;
+import io.lumine.mythic.bukkit.utils.chat.ColorString;
 import io.lumine.mythic.bukkit.utils.commands.Command;
-import io.lumine.mythic.bukkit.utils.text.Text;
+import io.lumine.mythic.bukkit.utils.version.ServerVersion;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
 import java.util.List;
 
-public class AdminCommand extends Command<MythicAchievementsPlugin> {
+public class GenerateCommand extends Command<MythicAchievementsPlugin> {
 
-    public AdminCommand(MythicAchievementsPlugin plugin) {
+    public GenerateCommand(AdminCommand plugin) {
         super(plugin);
-        
-        addSubCommands(
-                new GenerateCommand(this),
-                new ReloadCommand(this),
-                new VersionCommand(this));
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        Component[] messages = {
-                Text.parse("&e/mythicachievements &areload &7\u25BA &7&oReloads everything"),
-                Text.parse("&e/mythicachievements &aversion &7\u25BA &7&oPlugin version information")
-              };
-        CommandHelper.sendCommandMessage(sender, messages);
+
+        ((AchievementsExecutor) getPlugin().getAchievementManager()).getAdvancementGUIManager().registerAdvancements();
+        
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -50,6 +46,6 @@ public class AdminCommand extends Command<MythicAchievementsPlugin> {
 
     @Override
     public String getName() {
-        return null;
+        return "generate";
     }
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
 import com.google.common.collect.Maps;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
-import io.lumine.achievements.achievement.criteria.BlockBreakCriteria;
+import io.lumine.achievements.achievement.criteria.*;
 import io.lumine.achievements.api.achievements.Achievement;
 import io.lumine.achievements.api.achievements.AchievementCategory;
 import io.lumine.achievements.api.achievements.AchievementCriteria;
@@ -20,6 +20,7 @@ import io.lumine.mythic.bukkit.utils.config.properties.types.NodeListProp;
 import io.lumine.mythic.bukkit.utils.files.Files;
 import io.lumine.mythic.bukkit.utils.logging.Log;
 import io.lumine.mythic.bukkit.utils.plugin.ReloadableModule;
+import lombok.Getter;
 
 public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlugin> implements AchievementManager {
 
@@ -29,8 +30,12 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
     private final Map<String,AchievementCategory> categories = Maps.newConcurrentMap();
     private final Map<String,Achievement> achievements = Maps.newConcurrentMap();
     
+    @Getter private final AdvancementGUIExecutor advancementGUIManager;
+    
     public AchievementsExecutor(MythicAchievementsPlugin plugin) {
         super(plugin, false);
+        
+        this.advancementGUIManager = new AdvancementGUIExecutor(this);
         
         load(plugin);
     }
@@ -64,6 +69,8 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
             return false;
         });
         
+        this.advancementGUIManager.load(plugin);
+        
         reinitializeOnlinePlayers();
     }
 
@@ -86,8 +93,10 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
     public Optional<AchievementCriteria> getCriteria(Achievement achievement, String type) {
         return Optional.ofNullable(
                 switch(type) {
-                    case "BREAK_BLOCK" -> new BlockBreakCriteria(achievement);
-                    default -> null;
+                    case "BREAK_BLOCK"      -> new BlockBreakTypeCriteria(achievement);
+                    case "KILL_MOB_TYPE"    -> new KillMobTypeCriteria(achievement);
+                    case "KILL_MYTHIC_MOB"  -> new KillMythicMobTypeCriteria(achievement);
+                    default                 -> new ManualCriteria(achievement);
                 });
     }
 
