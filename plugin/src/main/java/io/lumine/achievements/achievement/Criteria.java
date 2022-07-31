@@ -25,7 +25,7 @@ import lombok.Getter;
 
 public abstract class Criteria implements AchievementCriteria,Terminable,TerminableConsumer {
 
-    private final IntProp AMOUNT = Property.Int(Scope.NONE, "Amount");
+    private final IntProp AMOUNT = Property.Int(Scope.NONE, "Amount", 1);
     private final StringListProp CONDITIONS = Property.StringList(Scope.NONE, "Conditions");
     
     private final TerminableRegistry registry = TerminableRegistry.create();
@@ -33,7 +33,7 @@ public abstract class Criteria implements AchievementCriteria,Terminable,Termina
     @Getter private final AchievementImpl achievement;
     
     @Getter private final int amount;
-    private final Collection<SkillCondition> conditions;
+    private Collection<SkillCondition> conditions = null;
 
     public Criteria(Achievement holder) {
         this.achievement = (AchievementImpl) holder;
@@ -49,7 +49,7 @@ public abstract class Criteria implements AchievementCriteria,Terminable,Termina
     }
     
     public boolean hasConditions() {
-        return !conditions.isEmpty();
+        return conditions != null && !conditions.isEmpty();
     }
      
     public boolean checkConditions(Player player) {

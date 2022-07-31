@@ -80,6 +80,11 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
     }
 
     @Override
+    public Collection<String> getAchievementNames() {
+        return achievements.keySet();
+    }
+    
+    @Override
     public Optional<Achievement> getAchievement(String name) {
         return Optional.ofNullable(achievements.getOrDefault(name, null));
     }

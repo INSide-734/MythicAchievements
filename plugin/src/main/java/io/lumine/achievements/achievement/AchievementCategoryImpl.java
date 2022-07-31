@@ -2,6 +2,7 @@ package io.lumine.achievements.achievement;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.advancement.Advancement;
@@ -49,7 +50,6 @@ public class AchievementCategoryImpl implements AchievementCategory {
     @Getter protected int iconData;   
     @Getter protected boolean hidden = false;
     
-    @Getter @Setter private Advancement advancement;
     @Getter private AdvancementCategoryWrapper advancementWrapper;
     
     @Getter public List<Achievement> achievements = Lists.newArrayList();
@@ -74,6 +74,10 @@ public class AchievementCategoryImpl implements AchievementCategory {
     @Override
     public String getPropertyNode() {
         return key;
+    }
+    
+    public Advancement getAdvancement() {
+        return Bukkit.getAdvancement(this.namespacedKey);
     }
 
     @Override

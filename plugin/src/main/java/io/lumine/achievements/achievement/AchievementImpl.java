@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.advancement.Advancement;
@@ -83,7 +84,6 @@ public class AchievementImpl extends Achievement {
 
     @Getter private ItemStack menuItem;
     
-    @Getter @Setter private transient Advancement advancement;
     @Getter private AdvancementWrapper advancementWrapper;
     
     @Getter private final Map<UUID,Profile> subscribedPlayers = Maps.newConcurrentMap();
@@ -107,7 +107,6 @@ public class AchievementImpl extends Achievement {
     }
     
     public boolean initialize() {
-        
         if(this.parentName != null) {
             var maybeParent = getManager().getAchievement(parentName);
             
@@ -154,7 +153,6 @@ public class AchievementImpl extends Achievement {
                     .lore(description)
                     .build();
         }
-        
         return true;
     }
 
@@ -165,10 +163,14 @@ public class AchievementImpl extends Achievement {
             sub.incrementAchievementStat(this, amount);
         }
     }
+    
+    public Advancement getAdvancement() {
+        return Bukkit.getAdvancement(this.namespacedKey);
+    }
 
     @Override
     public void sendCompletedMessage(Player player) {
-        player.sendTitle("", Text.colorize("<green>Achievement Completed"), 0, 20, 20);
+        player.sendTitle("", Text.colorizeLegacy("<green>Achievement Completed"), 0, 60, 20);
         Text.sendMessage(player, "achievement completed");
     }
     

@@ -7,6 +7,8 @@ import io.lumine.achievements.api.players.AchievementProfile;
 import io.lumine.achievements.constants.Constants;
 import io.lumine.mythic.bukkit.utils.logging.Log;
 import lombok.Getter;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.google.common.collect.Lists;
@@ -49,6 +51,10 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
     @Override
     public boolean hasCompleted(Achievement achieve) {
         return this.completedAchievements.containsKey(achieve.getKey());
+    }
+    
+    public Collection<String> getCompletedAchievementNames() {
+        return this.completedAchievements.keySet();
     }
 
     @Override
@@ -93,18 +99,21 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
             achieve.giveRewards(player);
         }
         
-        for(var child : achieve.getChildren()) {
-            subscribeToAchievement(child);
-        }
+        subscribedOrCompleted(achieve);
     }
     
-    public void resetAchievement(Achievement achieve) {
+    public void revokeAchievement(Achievement achieve) {
         achievementProgress.remove(achieve.getKey());
         completedAchievements.remove(achieve.getKey());
+
+        var adv = achieve.getAdvancement();
         
-        if(isProgressable(achieve)) {
-            subscribeToAchievement(achieve);
+        if(adv != null) {
+            final var progress = player.getAdvancementProgress(adv);
+            progress.revokeCriteria(Constants.CRITERIA_KEY);
         }
+        
+        rebuildAchievements();
     }
     
     public void subscribeToAchievement(Achievement achieve) {
@@ -146,13 +155,10 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
                 
                 if(adv != null) {
                     final var progress = player.getAdvancementProgress(adv);
-                    
-                    if(!progress.getRemainingCriteria().isEmpty()) {
-                        progress.awardCriteria(Constants.CRITERIA_KEY);
-                    }
+                    progress.awardCriteria(Constants.CRITERIA_KEY);
                 }
             }
-            for(var achieve : cat.getAchievements()) {
+            for(var achieve : cat.getBaseAchievements()) {
                 Log.info("-- Checking achievement {0}", achieve.getKey());
                 subscribedOrCompleted(achieve);
             }
@@ -161,15 +167,17 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
     }
     
     private void subscribedOrCompleted(Achievement achieve) {
+        Log.info("SubComp achievement {0}", achieve.getKey());
         if(hasCompleted(achieve)) {
+            Log.info("Completing achievement {0}", achieve.getKey());
             var adv = achieve.getAdvancement();
             
             if(adv != null) {
+                Log.info("Completing achievement progress {0}", achieve.getKey());
                 final var progress = player.getAdvancementProgress(adv);
-                
-                if(!progress.getRemainingCriteria().isEmpty()) {
-                    progress.awardCriteria(Constants.CRITERIA_KEY);
-                }
+                progress.awardCriteria(Constants.CRITERIA_KEY);
+            } else {
+                Log.info("Adv null for achievement {0}", achieve.getKey());
             }
             
             for(var child : achieve.getChildren()) {

@@ -1,6 +1,8 @@
 package io.lumine.achievements.achievement;
 
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+
 import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.api.achievements.Achievement;
 import io.lumine.achievements.constants.Constants;
@@ -16,7 +18,7 @@ public class AdvancementGUIExecutor extends ReloadableModule<MythicAchievementsP
 
     @Override
     public void load(MythicAchievementsPlugin plugin) {
-    
+        registerAdvancements();
     }
 
     @Override
@@ -26,9 +28,7 @@ public class AdvancementGUIExecutor extends ReloadableModule<MythicAchievementsP
 
     public void registerAdvancements() {
         this.clearAdvancements();
-        
-        Bukkit.reloadData();
-        
+
         for(var category : getPlugin().getAchievementManager().getCategories()) {
             var categoryKey = category.getNamespacedKey();
             var categoryBase = GsonProvider.standard().toJson(((AchievementCategoryImpl) category).getAdvancementWrapper());
@@ -39,9 +39,8 @@ public class AdvancementGUIExecutor extends ReloadableModule<MythicAchievementsP
             }
 
             Log.info("Loading category json {0}", categoryBase);
-            final var cadv = Bukkit.getUnsafe().loadAdvancement(categoryKey, categoryBase);
-            category.setAdvancement(cadv);
-            
+            Bukkit.getUnsafe().loadAdvancement(categoryKey, categoryBase);
+
             for(var achieve : category.getBaseAchievements()) {
                 Log.info("-- Loading base achievement {0}", achieve.getKey());
                 registerAdvancement(achieve);
@@ -60,25 +59,26 @@ public class AdvancementGUIExecutor extends ReloadableModule<MythicAchievementsP
             return;
         }
         Log.info("Loading {0}", achieveJson);
-        final var adv = Bukkit.getUnsafe().loadAdvancement(achieveKey, achieveJson);
-        achieve.setAdvancement(adv);
-        
+        Bukkit.getUnsafe().loadAdvancement(achieveKey, achieveJson);
+
         for(var child : achieve.getChildren()) {
             Log.info("---- Loading achievement {0}", child.getKey());
             registerAdvancement(child);
         }
     }
 
-    private void clearAdvancements() {
+    public void clearAdvancements() {
         var advancements = Bukkit.advancementIterator();
+        var namespace = new NamespacedKey(getPlugin(), "CarsonJF");
         
         while(advancements.hasNext()) {
             var achieveKey = advancements.next().getKey();
             
-            if(Constants.CRITERIA_KEY.equals(achieveKey.getNamespace())) {
+            if(namespace.getNamespace().equals(achieveKey.getNamespace())) {
                 Bukkit.getUnsafe().removeAdvancement(achieveKey);
             }
         }
+        Bukkit.reloadData();
     }
 
 }

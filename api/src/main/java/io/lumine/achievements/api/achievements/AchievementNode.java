@@ -8,9 +8,7 @@ public interface AchievementNode {
     public NamespacedKey getNamespacedKey();
 
     public Advancement getAdvancement();
-    
-    public void setAdvancement(Advancement adv);
-    
+
     public String getTitle();
     
     public String getDescription();
