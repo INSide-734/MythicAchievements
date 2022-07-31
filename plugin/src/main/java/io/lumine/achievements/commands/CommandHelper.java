@@ -11,14 +11,14 @@ public class CommandHelper {
 
     public static final StringProp COMMAND_HEADER = Property.String(Scope.CONFIG,
             "Configuration.Language.Command-Header",
-            "<yellow><strikethrough>------------<gold>=====</strikethrough> <bold><gradient:#dc0c1f:#ed858f>MCCosmetics</gradient></bold> <strikethrough><gold>=====<yellow>------------</strikethrough>");
+            "<yellow><strikethrough>----------<gold>=====</strikethrough> <bold><gradient:#A57C01:#B79001:#FFDF01:#EDCB01:#DBB701:#C9A401>MythicAchievements</gradient></bold> <strikethrough><gold>=====<yellow>----------</strikethrough>");
 
     public static final StringProp COMMAND_FOOTER = Property.String(Scope.CONFIG,
             "Configuration.Language.Command-Footer",
             "<yellow><strikethrough>--------------------------------------</strikethrough>");
     public static final StringProp COMMAND_PREFIX = Property.String(Scope.CONFIG,
             "Configuration.Language.Command-Prefix",
-            "<bold><white>[<#dc0c1f>MCCosmetics<white>]</bold> ");
+            "<bold><white>[<#A57C01:#B79001:#FFDF01:#EDCB01:#DBB701:#C9A401>MythicAchievements<white>]</bold> ");
     
     public static void sendCommandHeader(CommandSender sender) {
         Text.sendMessage(sender, Text.parse(COMMAND_HEADER.get()));

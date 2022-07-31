@@ -33,6 +33,7 @@
         <module>plugin</module>
         <module>v1_19_R1</module>
         <module>dist</module>
+        <module>dist-premium</module>
 	</modules>
  
   	<distributionManagement>

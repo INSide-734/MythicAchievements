@@ -155,7 +155,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
      */
     private static Object amIPremium() {
         try {
-            return Class.forName("io.lumine.mythicachievements.CarsonJF");
+            return Class.forName("io.lumine.achievements.CarsonJF");
         } catch (final ClassNotFoundException e) {
             return null;
         } catch (final Exception e) {
