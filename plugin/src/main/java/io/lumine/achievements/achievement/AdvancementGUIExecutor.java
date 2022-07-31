@@ -5,15 +5,18 @@ import org.bukkit.NamespacedKey;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.api.achievements.Achievement;
-import io.lumine.achievements.constants.Constants;
 import io.lumine.mythic.bukkit.utils.gson.GsonProvider;
 import io.lumine.mythic.bukkit.utils.logging.Log;
 import io.lumine.mythic.bukkit.utils.plugin.ReloadableModule;
 
 public class AdvancementGUIExecutor extends ReloadableModule<MythicAchievementsPlugin> {
 
+    private AchievementsExecutor manager;
+    
     public AdvancementGUIExecutor(AchievementsExecutor manager) {
         super(manager.getPlugin(), false);
+        
+        this.manager = manager;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class AdvancementGUIExecutor extends ReloadableModule<MythicAchievementsP
     public void registerAdvancements() {
         this.clearAdvancements();
 
-        for(var category : getPlugin().getAchievementManager().getCategories()) {
+        for(var category : manager.getCategories()) {
             var categoryKey = category.getNamespacedKey();
             var categoryBase = GsonProvider.standard().toJson(((AchievementCategoryImpl) category).getAdvancementWrapper());
             
@@ -38,11 +41,9 @@ public class AdvancementGUIExecutor extends ReloadableModule<MythicAchievementsP
                 continue;
             }
 
-            Log.info("Loading category json {0}", categoryBase);
             Bukkit.getUnsafe().loadAdvancement(categoryKey, categoryBase);
 
             for(var achieve : category.getBaseAchievements()) {
-                Log.info("-- Loading base achievement {0}", achieve.getKey());
                 registerAdvancement(achieve);
             }
         }
@@ -58,11 +59,9 @@ public class AdvancementGUIExecutor extends ReloadableModule<MythicAchievementsP
             Log.error("Achievement {0} is already registered (duplicate key?)", achieve.getKey());
             return;
         }
-        Log.info("Loading {0}", achieveJson);
         Bukkit.getUnsafe().loadAdvancement(achieveKey, achieveJson);
 
         for(var child : achieve.getChildren()) {
-            Log.info("---- Loading achievement {0}", child.getKey());
             registerAdvancement(child);
         }
     }

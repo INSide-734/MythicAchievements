@@ -27,8 +27,12 @@ import io.lumine.achievements.api.achievements.manager.AchievementManager;
 import io.lumine.achievements.api.players.AchievementProfile;
 import io.lumine.achievements.config.Scope;
 import io.lumine.achievements.players.Profile;
-import io.lumine.core.util.FireworkUtil;
 import io.lumine.mythic.core.drops.DropTable;
+import io.lumine.mythic.bukkit.utils.Players;
+import io.lumine.mythic.bukkit.utils.adventure.text.Component;
+import io.lumine.mythic.bukkit.utils.adventure.text.TextReplacementConfig;
+import io.lumine.mythic.bukkit.utils.adventure.text.event.HoverEvent;
+import io.lumine.mythic.bukkit.utils.adventure.text.format.NamedTextColor;
 import io.lumine.mythic.bukkit.utils.config.properties.Property;
 import io.lumine.mythic.bukkit.utils.config.properties.types.BooleanProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.EnumProp;
@@ -119,7 +123,6 @@ public class AchievementImpl extends Achievement {
         var maybeCategory = getManager().getCategory(categoryName);
         
         if(maybeCategory.isEmpty()) {
-            Log.info("-- Failed to find category {0}", categoryName);
             return false;
         }
         this.category = maybeCategory.get();
@@ -171,15 +174,44 @@ public class AchievementImpl extends Achievement {
     @Override
     public void sendCompletedMessage(Player player) {
         player.sendTitle("", Text.colorizeLegacy("<green>Achievement Completed"), 0, 60, 20);
-        Text.sendMessage(player, "achievement completed");
+        
+        var out = Text.parse("<white><name> has made the advancement <green><advancement>");
+
+        var nameReplacement = TextReplacementConfig.builder()
+                .matchLiteral("<name>")
+                .replacement(matchResult -> Component.text(player.getName())).build();
+        
+        var advReplacement = TextReplacementConfig.builder()
+                .matchLiteral("<advancement>")
+                .replacement(matchResult -> Component.text()
+                            .colorIfAbsent(NamedTextColor.GREEN)
+                            .append(Component.text("["))
+                            .append(Component.text(title))
+                            .append(Component.text("]"))
+                            .hoverEvent(
+                                    HoverEvent.showText(
+                                            Component.text()
+                                                    .colorIfAbsent(NamedTextColor.GREEN)
+                                                    .append(Component.text(title))
+                                                    .append(Component.text("\n"))
+                                                    .append(Component.text(description))))
+                ).build();
+        
+        out = out.replaceText(nameReplacement);
+        out = out.replaceText(advReplacement);
+        
+        for(var p : Players.all()) {
+            Text.sendMessage(p, out);
+        }
     }
     
     @Override
     public void giveRewards(Player player) {
-        Text.sendMessage(player, "rewards given");
+        //Text.sendMessage(player, "rewards given");
     }
     
-    protected Icon<AchievementProfile> buildIcon(String type) {
+    @Override
+    public Icon<AchievementProfile> getIcon() {
         return IconBuilder.<AchievementProfile>create()
                 .name(Text.colorize(this.getTitle()))
                 .itemStack(this.menuItem)
@@ -219,13 +251,5 @@ public class AchievementImpl extends Achievement {
     public String getPropertyNode() {
         return getKey();
     }
-
-    @Override
-    public Icon<AchievementProfile> getIcon() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
         
 }
