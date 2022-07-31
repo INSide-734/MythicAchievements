@@ -1,7 +1,7 @@
 package io.lumine.achievements.compat;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
-import io.lumine.achievements.compat.mythicmobs.CosmeticEmoteMechanic;
+import io.lumine.achievements.compat.mythicmobs.GrantAchievementMechanic;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.mythic.bukkit.utils.Events;
@@ -19,8 +19,8 @@ public class MythicMobsCompat {
 
         Events.subscribe(MythicMechanicLoadEvent.class).handler(event -> {
             switch(event.getMechanicName().toUpperCase()){
-                case "COSMETICEMOTE":
-                    event.register(new CosmeticEmoteMechanic(event.getMechanicName(), event.getConfig()));
+                case "GRANTACHIEVEMENT":
+                    event.register(new GrantAchievementMechanic(plugin, event.getConfig()));
             }
         }).bindWith(plugin);
 
