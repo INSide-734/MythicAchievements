@@ -15,6 +15,6 @@ public interface AchievementManager {
     
     public Optional<AchievementCategory> getCategory(String name);
     
-    public Optional<AchievementCriteria> getCriteria(Achievement achievement, String criteriaType);
+    public Optional<AchievementCriteria> getCriteria(Achievement achievement, String node, String criteriaType);
     
 }

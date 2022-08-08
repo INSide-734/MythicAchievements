@@ -95,13 +95,13 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
     }
 
     @Override
-    public Optional<AchievementCriteria> getCriteria(Achievement achievement, String type) {
+    public Optional<AchievementCriteria> getCriteria(Achievement achievement, String criteriaNode, String type) {
         return Optional.ofNullable(
                 switch(type) {
-                    case "BREAK_BLOCK"      -> new BlockBreakTypeCriteria(achievement);
-                    case "KILL_MOB_TYPE"    -> new KillMobTypeCriteria(achievement);
-                    case "KILL_MYTHIC_MOB"  -> new KillMythicMobTypeCriteria(achievement);
-                    default                 -> new ManualCriteria(achievement);
+                    case "BREAK_BLOCK"      -> new BlockBreakTypeCriteria(criteriaNode, achievement);
+                    case "KILL_MOB_TYPE"    -> new KillMobTypeCriteria(criteriaNode, achievement);
+                    case "KILL_MYTHIC_MOB"  -> new KillMythicMobTypeCriteria(criteriaNode, achievement);
+                    default                 -> new ManualCriteria(criteriaNode, achievement);
                 });
     }
 

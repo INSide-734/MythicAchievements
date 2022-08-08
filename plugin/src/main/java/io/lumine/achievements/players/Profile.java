@@ -1,8 +1,10 @@
 package io.lumine.achievements.players;
 
 import io.lumine.achievements.achievement.AchievementImpl;
+import io.lumine.achievements.achievement.AchievementProgress;
 import io.lumine.achievements.achievement.CompletedAchievement;
 import io.lumine.achievements.api.achievements.Achievement;
+import io.lumine.achievements.api.achievements.AchievementCriteria;
 import io.lumine.achievements.api.players.AchievementProfile;
 import io.lumine.achievements.constants.Constants;
 import io.lumine.mythic.bukkit.utils.logging.Log;
@@ -26,7 +28,7 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
     @Getter private String name;
     @Getter private long timestamp = System.currentTimeMillis();
 
-    private Map<String,Integer> achievementProgress = Maps.newConcurrentMap();
+    private Map<String,AchievementProgress> achievementProgress = Maps.newConcurrentMap();
     private Map<String,CompletedAchievement> completedAchievements = Maps.newConcurrentMap();
     
     private transient Collection<Achievement> subscribedAchievements = Sets.newHashSet();
@@ -77,10 +79,16 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
         }
     }
     
-    public void incrementAchievementStat(Achievement achievement, int amount) {
-        var newValue = achievementProgress.merge(achievement.getKey(), amount, (o,n) -> o + n);
+    public void incrementAchievementStat(Achievement achievement, AchievementCriteria criteria, int amount) {
+        var progress = achievementProgress.getOrDefault(achievement.getKey(), null);
         
-        if(newValue >= ((AchievementImpl) achievement).getCriteria().getAmount()) {
+        if(progress == null) {
+            progress = new AchievementProgress();
+            achievementProgress.put(achievement.getKey(), progress);
+        }
+        progress.incrementProgress(criteria, amount);
+        
+        if(progress.hasCompleted(achievement)) {
             completeAchievement(achievement, true);
         }
     }
@@ -116,27 +124,62 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
         rebuildAchievements();
     }
     
+    public void resetAchievements() {
+        for(var key : achievementProgress.keySet()) {
+            var achieve = manager.getPlugin().getAchievementManager().getAchievement(key);
+            
+            if(achieve.isEmpty()) {
+                continue;
+            }
+            
+            var adv = achieve.get().getAdvancement();
+            
+            if(adv != null) {
+                final var progress = player.getAdvancementProgress(adv);
+                progress.revokeCriteria(Constants.CRITERIA_KEY);
+            }
+        }
+
+        for(var key : completedAchievements.keySet()) {
+            var achieve = manager.getPlugin().getAchievementManager().getAchievement(key);
+            
+            if(achieve.isEmpty()) {
+                continue;
+            }
+            
+            var adv = achieve.get().getAdvancement();
+            
+            if(adv != null) {
+                final var progress = player.getAdvancementProgress(adv);
+                progress.revokeCriteria(Constants.CRITERIA_KEY);
+            }
+        }
+        
+        achievementProgress.clear();
+        completedAchievements.clear();
+        
+        rebuildAchievements();
+    }
+    
     public void subscribeToAchievement(Achievement achieve) {
-        Log.info("Subscribed to achievement {0}", achieve.getKey());
-        ((AchievementImpl) achieve).getSubscribedPlayers().put(uniqueId,this);
+        //Log.info("Subscribed to achievement {0}", achieve.getKey());
+        achieve.subscribe(this);
         subscribedAchievements.add(achieve);
     }
     
     public void unsubscribeFromAchievement(Achievement achieve) {
-        ((AchievementImpl) achieve).getSubscribedPlayers().remove(uniqueId);
+        achieve.unsubscribe(this);
         subscribedAchievements.remove(achieve);
     }
     
     public boolean isProgressable(Achievement achieve) {
         if(completedAchievements.containsKey(achieve.getKey())) {
-            Log.info("-- Achievement already completed");
             return false;
         }
         if(achieve.hasParent()) {
             var parent = achieve.getParent().get();
             
             if(!completedAchievements.containsKey(parent.getKey())) {
-                Log.info("-- Achievement parent not completed");
                 return false;
             }
         }
@@ -145,7 +188,7 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
     
     public void rebuildAchievements() {
         for(var achieve : subscribedAchievements) {
-            ((AchievementImpl) achieve).getSubscribedPlayers().remove(uniqueId);
+            achieve.unsubscribe(this);
         }
         subscribedAchievements.clear();
         
@@ -159,32 +202,29 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
                 }
             }
             for(var achieve : cat.getBaseAchievements()) {
-                Log.info("-- Checking achievement {0}", achieve.getKey());
                 subscribedOrCompleted(achieve);
             }
         }
-        Log.info("Subscribed to {0} achievements", subscribedAchievements.size());
+        //Log.info("Subscribed to {0} achievements", subscribedAchievements.size());
     }
     
     private void subscribedOrCompleted(Achievement achieve) {
-        Log.info("SubComp achievement {0}", achieve.getKey());
+        //Log.info("SubComp achievement {0}", achieve.getKey());
         if(hasCompleted(achieve)) {
-            Log.info("Completing achievement {0}", achieve.getKey());
+            //Log.info("Completing achievement {0}", achieve.getKey());
             var adv = achieve.getAdvancement();
             
             if(adv != null) {
-                Log.info("Completing achievement progress {0}", achieve.getKey());
+                //Log.info("Completing achievement progress {0}", achieve.getKey());
                 final var progress = player.getAdvancementProgress(adv);
                 progress.awardCriteria(Constants.CRITERIA_KEY);
-            } else {
-                Log.info("Adv null for achievement {0}", achieve.getKey());
             }
             
             for(var child : achieve.getChildren()) {
                 subscribedOrCompleted(child);
             }
         } else if(isProgressable(achieve)) {
-            Log.info("---- Can sub to achievement {0}", achieve.getKey());
+            //Log.info("---- Can sub to achievement {0}", achieve.getKey());
             subscribeToAchievement(achieve);
         }
     }

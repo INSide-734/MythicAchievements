@@ -23,11 +23,13 @@ public class KillMythicMobTypeCriteria extends Criteria {
     
     private final String entityType;
     
-    public KillMythicMobTypeCriteria(Achievement holder) {
-        super(holder);
+    public KillMythicMobTypeCriteria(String criteriaNode, Achievement holder) {
+        super(criteriaNode, holder);
         
         this.entityType = ENTITY_TYPE.fget(holder.getFile(), this);
-
+    }
+    
+    public void load() {
         Events.subscribe(MythicMobDeathEvent.class, EventPriority.MONITOR)
             .filter(event -> event.getKiller() != null && event.getKiller() instanceof Player)
             .filter(event -> event.getMobType().getInternalName().equals(entityType))

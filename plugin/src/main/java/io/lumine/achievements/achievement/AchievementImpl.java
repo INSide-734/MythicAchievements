@@ -16,28 +16,22 @@ import org.bukkit.inventory.ItemStack;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
 import io.lumine.achievements.achievement.serialization.AdvancementWrapper;
 import io.lumine.achievements.api.achievements.Achievement;
 import io.lumine.achievements.api.achievements.AchievementCategory;
 import io.lumine.achievements.api.achievements.AchievementCriteria;
 import io.lumine.achievements.api.achievements.AchievementFrame;
-import io.lumine.achievements.api.achievements.manager.AchievementManager;
 import io.lumine.achievements.api.players.AchievementProfile;
 import io.lumine.achievements.config.Scope;
 import io.lumine.achievements.players.Profile;
-import io.lumine.mythic.core.drops.DropTable;
 import io.lumine.mythic.bukkit.utils.Players;
 import io.lumine.mythic.bukkit.utils.adventure.text.Component;
 import io.lumine.mythic.bukkit.utils.adventure.text.TextReplacementConfig;
 import io.lumine.mythic.bukkit.utils.adventure.text.event.HoverEvent;
 import io.lumine.mythic.bukkit.utils.adventure.text.format.NamedTextColor;
 import io.lumine.mythic.bukkit.utils.config.properties.Property;
-import io.lumine.mythic.bukkit.utils.config.properties.types.BooleanProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.EnumProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.IntProp;
-import io.lumine.mythic.bukkit.utils.config.properties.types.LangListProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.LangProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.NodeListProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.StringProp;
@@ -47,7 +41,6 @@ import io.lumine.mythic.bukkit.utils.menu.Icon;
 import io.lumine.mythic.bukkit.utils.menu.IconBuilder;
 import io.lumine.mythic.bukkit.utils.text.Text;
 import lombok.Getter;
-import lombok.Setter;
 
 public class AchievementImpl extends Achievement {
 
@@ -57,7 +50,7 @@ public class AchievementImpl extends Achievement {
     protected static final LangProp DESCRIPTION = Property.Lang(Scope.NONE, "Description", "");
     protected static final StringProp PARENT = Property.String(Scope.NONE, "Parent", null);
     protected static final StringProp CATEGORY = Property.String(Scope.NONE, "Category", null);
-    protected static final StringProp CRITERIA = Property.String(Scope.NONE, "Criteria.Type", null);
+    protected static final NodeListProp CRITERIA = Property.NodeList(Scope.NONE, "Criteria");
     protected static final EnumProp<AchievementFrame> FRAME = Property.Enum(Scope.CATEGORIES, AchievementFrame.class, "Frame", AchievementFrame.GOAL);
     
     protected static final EnumProp<Material> MATERIAL = Property.Enum(Scope.NONE, Material.class, "Icon.Material", Material.EMERALD);
@@ -74,12 +67,11 @@ public class AchievementImpl extends Achievement {
     
     @Getter private String categoryName;
     @Getter private String parentName;
-    @Getter private String criteriaType;
     
     @Getter private AchievementCategory category;
     @Getter private Optional<Achievement> parent = Optional.empty();
     @Getter private Collection<Achievement> children = Lists.newArrayList();
-    @Getter private AchievementCriteria criteria;
+    private Map<String,AchievementCriteria> criteria = Maps.newConcurrentMap();
     
     @Getter private Material iconMaterial;
     @Getter private int iconData;
@@ -90,7 +82,7 @@ public class AchievementImpl extends Achievement {
     
     @Getter private AdvancementWrapper advancementWrapper;
     
-    @Getter private final Map<UUID,Profile> subscribedPlayers = Maps.newConcurrentMap();
+    private final Map<UUID,AchievementProfile> subscribedPlayers = Maps.newConcurrentMap();
 
     public AchievementImpl(AchievementsExecutor manager, File file, String key) {
         super(manager, key);
@@ -104,7 +96,6 @@ public class AchievementImpl extends Achievement {
         
         this.categoryName = CATEGORY.fget(file,this);
         this.parentName = PARENT.fget(file,this);
-        this.criteriaType = CRITERIA.fget(file,this);
         
         this.iconMaterial = MATERIAL.fget(file,this);
         this.iconData = MODEL.fget(file,this);
@@ -127,12 +118,26 @@ public class AchievementImpl extends Achievement {
         }
         this.category = maybeCategory.get();
         
-        var maybeCriteria = getManager().getCriteria(this,criteriaType);
-        if(maybeCriteria.isEmpty()) {
+        for(var criteriaNode : CRITERIA.fget(file,this)) {
+            var criteriaType = Property.String(Scope.NONE, "Criteria."+criteriaNode+".Type", null).fget(file,this);
+            
+            if(criteriaType == null) {
+                Log.error("No criteria type {0} for achievement {1}", criteriaNode, getKey());
+                return false;
+            }
+            
+            var maybeCriteria = getManager().getCriteria(this, criteriaNode, criteriaType);
+            if(maybeCriteria.isEmpty()) {
+                Log.error("Invalid criteria type {0} for achievement {1}", criteriaNode, getKey());
+                return false;
+            }
+            this.criteria.put(criteriaNode, maybeCriteria.get());
+        }
+        if(criteria.size() == 0) {
+            Log.error("No criteria loaded for achievement {1}", getKey());
             return false;
         }
-        this.criteria = maybeCriteria.get();
-        
+
         if(this.parent.isPresent()) {
             this.parent.get().getChildren().add(this);
         }
@@ -158,12 +163,33 @@ public class AchievementImpl extends Achievement {
         }
         return true;
     }
-
-    public void incrementIfSubscribed(Player player, int amount) {
-        var sub = subscribedPlayers.get(player.getUniqueId());
+    
+    public Collection<AchievementCriteria> getCriteria() {
+        return criteria.values();
+    }
+    
+    public void subscribe(AchievementProfile profile) {
+        subscribedPlayers.put(profile.getPlayer().getUniqueId(), profile);
+        for(var criteria : this.criteria.values()) {
+            criteria.loadListeners();
+        }
+    }
+    
+    public void unsubscribe(AchievementProfile profile) {
+        subscribedPlayers.remove(profile.getPlayer().getUniqueId());
         
+        if(subscribedPlayers.isEmpty()) {
+            for(var criteria : this.criteria.values()) {
+                criteria.unloadListeners();
+            }
+        }
+    }
+
+    public void incrementIfSubscribed(Player player, AchievementCriteria criteria, int amount) {
+        var sub = (Profile) subscribedPlayers.get(player.getUniqueId());
+
         if(sub != null) {
-            sub.incrementAchievementStat(this, amount);
+            sub.incrementAchievementStat(this, criteria, amount);
         }
     }
     

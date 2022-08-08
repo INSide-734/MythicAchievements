@@ -7,9 +7,11 @@ import io.lumine.mythic.bukkit.utils.menu.Icon;
 
 public class ManualCriteria extends Criteria {
 
-    public ManualCriteria(Achievement holder) {
-        super(holder);
+    public ManualCriteria(String criteriaNode, Achievement holder) {
+        super(criteriaNode, holder);
     }
+
+    public void load() {}
 
     @Override
     public Icon<AchievementProfile> getIcon() {

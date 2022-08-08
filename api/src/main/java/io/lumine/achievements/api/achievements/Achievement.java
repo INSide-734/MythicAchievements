@@ -34,7 +34,7 @@ public abstract class Achievement implements AchievementNode,PropertyHolder,Menu
     
     public abstract AchievementCategory getCategory();
     
-    public abstract AchievementCriteria getCriteria();
+    public abstract Collection<AchievementCriteria> getCriteria();
     
     public abstract Optional<Achievement> getParent();
     
@@ -48,11 +48,15 @@ public abstract class Achievement implements AchievementNode,PropertyHolder,Menu
         return getParent().isPresent();
     }
     
-    public void incrementIfSubscribed(Player player) {
-        incrementIfSubscribed(player, 1);
+    public abstract void subscribe(AchievementProfile player);
+    
+    public abstract void unsubscribe(AchievementProfile player);
+    
+    public void incrementIfSubscribed(Player player, AchievementCriteria criteria) {
+        incrementIfSubscribed(player, criteria, 1);
     }
     
-    public abstract void incrementIfSubscribed(Player player, int amount);
+    public abstract void incrementIfSubscribed(Player player, AchievementCriteria criteria, int amount);
     
     public abstract void sendCompletedMessage(Player player);
     

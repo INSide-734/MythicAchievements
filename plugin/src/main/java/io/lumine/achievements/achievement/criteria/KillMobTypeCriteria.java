@@ -22,13 +22,15 @@ public class KillMobTypeCriteria extends Criteria {
     private final String entityType;
     private final EntityType type;
     
-    public KillMobTypeCriteria(Achievement holder) {
-        super(holder);
+    public KillMobTypeCriteria(String criteriaNode, Achievement holder) {
+        super(criteriaNode, holder);
         
         this.entityType = ENTITY_TYPE.fget(holder.getFile(), this);
         
         this.type = EntityType.valueOf(entityType);
-        
+    }
+    
+    public void load() {
         Events.subscribe(EntityDeathEvent.class, EventPriority.MONITOR)
             .filter(event -> event.getEntity().getKiller() != null)
             .filter(event -> event.getEntityType() == type)

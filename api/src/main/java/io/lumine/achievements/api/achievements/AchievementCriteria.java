@@ -6,6 +6,12 @@ import io.lumine.mythic.bukkit.utils.menu.MenuData;
 
 public interface AchievementCriteria extends PropertyHolder,MenuData<AchievementProfile> {
 
+    public String getKey();
+    
+    public void loadListeners();
+    
+    public void unloadListeners();
+    
     public int getAmount();
     
 }

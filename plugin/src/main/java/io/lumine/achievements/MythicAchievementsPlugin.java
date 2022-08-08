@@ -112,7 +112,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
             new bStats(this);
         }
 
-        MCLogger.log("" + ConsoleColor.GREEN + ConsoleColor.CHECK_MARK + " MCCosmetics" + (isPremium() ? " Premium" : "") + " v" + getVersion() +  " (build "+ getBuildNumber() +") has been successfully loaded!" + ConsoleColor.RESET);
+        MCLogger.log("" + ConsoleColor.GREEN + ConsoleColor.CHECK_MARK + " MythicAchievements" + (isPremium() ? " Premium" : "") + " v" + getVersion() +  " (build "+ getBuildNumber() +") has been successfully loaded!" + ConsoleColor.RESET);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
     }
     
     /**
-     * @return MCCosmetics Returns the active MCCosmetics instance.
+     * @return MythicAchievements Returns the active MythicAchievements instance.
      */
     public static MythicAchievementsPlugin inst()    {
         return plugin; 

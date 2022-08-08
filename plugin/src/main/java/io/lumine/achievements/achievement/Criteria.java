@@ -6,8 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.google.common.collect.Lists;
-
 import io.lumine.achievements.api.achievements.Achievement;
 import io.lumine.achievements.api.achievements.AchievementCriteria;
 import io.lumine.achievements.config.Scope;
@@ -19,7 +17,6 @@ import io.lumine.mythic.bukkit.utils.terminable.TerminableRegistry;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.utils.config.properties.Property;
-import io.lumine.mythic.bukkit.utils.config.properties.PropertyHolder;
 import io.lumine.mythic.core.skills.SkillCondition;
 import lombok.Getter;
 
@@ -28,24 +25,42 @@ public abstract class Criteria implements AchievementCriteria,Terminable,Termina
     private final IntProp AMOUNT = Property.Int(Scope.NONE, "Amount", 1);
     private final StringListProp CONDITIONS = Property.StringList(Scope.NONE, "Conditions");
     
-    private final TerminableRegistry registry = TerminableRegistry.create();
+    private TerminableRegistry registry = null;
 
     @Getter private final AchievementImpl achievement;
+    @Getter private final String key;
     
     @Getter private final int amount;
     private Collection<SkillCondition> conditions = null;
 
-    public Criteria(Achievement holder) {
+    public Criteria(String criteriaNode, Achievement holder) {
         this.achievement = (AchievementImpl) holder;
+        this.key = criteriaNode;
         
         this.amount = AMOUNT.fget(achievement.getFile(), this);
         var conditionsIn = CONDITIONS.fget(achievement.getFile(), this);
         
         this.conditions = MythicBukkit.inst().getSkillManager().getConditions(conditionsIn);
     }
+    
+    public void loadListeners() {
+        //Log.info("Trying to load listeners for criteria {0}", getKey());
+        if(this.registry == null || this.registry.isClosed()) { 
+            this.registry = TerminableRegistry.create();
+            load();
+            //Log.info("Loaded listeners for criteria {0}", getKey());
+        }
+    }
+    
+    public abstract void load();
+    
+    public void unloadListeners() {
+        //Log.info("Unloading listeners for criteria {0}", getKey());
+        this.terminate();
+    }
 
     public void incrementStat(Player player) {
-        achievement.incrementIfSubscribed(player);
+        achievement.incrementIfSubscribed(player, this, 1);
     }
     
     public boolean hasConditions() {
@@ -107,7 +122,7 @@ public abstract class Criteria implements AchievementCriteria,Terminable,Termina
     
     @Override
     public String getPropertyNode() {
-        return achievement.getPropertyNode() + ".Criteria";
+        return achievement.getPropertyNode() + ".Criteria." + key;
     }
 
     @Override

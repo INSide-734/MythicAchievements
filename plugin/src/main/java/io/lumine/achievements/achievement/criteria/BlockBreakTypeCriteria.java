@@ -10,6 +10,7 @@ import io.lumine.achievements.config.Scope;
 import io.lumine.mythic.bukkit.utils.Events;
 import io.lumine.mythic.bukkit.utils.config.properties.Property;
 import io.lumine.mythic.bukkit.utils.config.properties.types.StringProp;
+import io.lumine.mythic.bukkit.utils.logging.Log;
 import io.lumine.mythic.bukkit.utils.menu.Icon;
 
 public class BlockBreakTypeCriteria extends Criteria {
@@ -19,13 +20,15 @@ public class BlockBreakTypeCriteria extends Criteria {
     private final String blockType;
     private final Material block;
     
-    public BlockBreakTypeCriteria(Achievement holder) {
-        super(holder);
+    public BlockBreakTypeCriteria(String criteriaNode, Achievement holder) {
+        super(criteriaNode, holder);
         
         this.blockType = BLOCK_TYPE.fget(holder.getFile(), this);
         
         this.block = Material.valueOf(blockType);
-        
+    }
+    
+    public void load() {
         Events.subscribe(BlockBreakEvent.class)
             .filter(event -> event.getBlock().getType() == block)
             .handler(event -> {
