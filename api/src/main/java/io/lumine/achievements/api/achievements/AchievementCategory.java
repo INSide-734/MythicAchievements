@@ -8,7 +8,7 @@ import io.lumine.achievements.api.players.AchievementProfile;
 import io.lumine.mythic.bukkit.utils.config.properties.PropertyHolder;
 import io.lumine.mythic.bukkit.utils.menu.MenuData;
 
-public interface AchievementCategory extends AchievementNode,PropertyHolder,MenuData<AchievementProfile> {
+public interface AchievementCategory extends AchievementNode,PropertyHolder {
 
     public NamespacedKey getNamespacedKey();
    

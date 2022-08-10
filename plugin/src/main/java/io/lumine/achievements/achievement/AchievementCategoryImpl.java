@@ -16,6 +16,7 @@ import io.lumine.achievements.api.achievements.AchievementFrame;
 import io.lumine.achievements.api.achievements.manager.AchievementManager;
 import io.lumine.achievements.api.players.AchievementProfile;
 import io.lumine.achievements.config.Scope;
+import io.lumine.achievements.menus.admin.CategoryMenuContext;
 import io.lumine.mythic.bukkit.utils.config.properties.Property;
 import io.lumine.mythic.bukkit.utils.config.properties.types.EnumProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.IntProp;
@@ -23,10 +24,11 @@ import io.lumine.mythic.bukkit.utils.config.properties.types.LangProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.StringProp;
 import io.lumine.mythic.bukkit.utils.menu.Icon;
 import io.lumine.mythic.bukkit.utils.menu.IconBuilder;
+import io.lumine.mythic.bukkit.utils.menu.MenuData;
 import lombok.Getter;
 import lombok.Setter;
 
-public class AchievementCategoryImpl implements AchievementCategory {
+public class AchievementCategoryImpl implements AchievementCategory,MenuData<AchievementProfile> {
 
     protected static final LangProp DISPLAY = Property.Lang(Scope.CATEGORIES, "Display");
     protected static final LangProp DESCRIPTION = Property.Lang(Scope.CATEGORIES, "Description");

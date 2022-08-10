@@ -1,0 +1,33 @@
+Menu:
+  Display: "<bold>MythicAchievements Menu"
+  Size: 45
+  Schema:
+   - 1 1 1 1 1 1 1 1 1
+   - 1 0 0 0 0 0 0 0 1
+   - 1 0 0 A 0 S 0 0 1
+   - 1 0 0 0 0 0 0 0 1
+   - 1 1 1 1 1 1 1 1 1
+  Icons:
+    FANCY_BORDER:
+      Mapping: 1
+      Material: BLACK_STAINED_GLASS_PANE
+      Display: '&8www.mythiccraft.io'
+      Model: 1
+    BUTTON_ACHIEVEMENTBROWSER:
+      Mapping: A
+      Material: NETHER_STAR
+      Display: '&9Achievement Browser'
+      Lore:
+      - ''
+      - '&cBrowse and edit achievements'
+      - ''
+      - '&e» &aClick to Open'
+    BUTTON_ITEMBROWSER:
+      Mapping: S
+      Material: COMMAND_BLOCK
+      Display: '&9Configuration'
+      Lore:
+      - ''
+      - '&7Configure general settings'
+      - ''
+      - '&e» &aClick to Open'

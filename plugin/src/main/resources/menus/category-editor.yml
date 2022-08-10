@@ -1,0 +1,60 @@
+Menu:
+  Display: "<bold>Mythic Menu"
+  Size: 45
+  Schema:
+   - 1 1 1 1 1 1 1 1 1
+   - 1 0 0 0 0 0 0 0 1
+   - 1 0 M I D R S 0 1
+   - 1 0 0 0 0 0 0 0 1
+   - 1 1 1 1 1 1 1 1 1
+  Icons:
+    FANCY_BORDER:
+      Mapping: 1
+      Material: BLACK_STAINED_GLASS_PANE
+      Display: '&8www.mythiccraft.io'
+      Model: 1
+    BUTTON_MOBBROWSER:
+      Mapping: I
+      Material: DRAGON_HEAD
+      Display: '&9Mob Browser'
+      Lore:
+      - ''
+      - '&cComing Soon?'
+      - ''
+      - '&e» &aClick to Open'
+    BUTTON_ITEMBROWSER:
+      Mapping: I
+      Material: NETHERITE_SWORD
+      Display: '&9Item Browser'
+      Lore:
+      - ''
+      - '&7an item browser???'
+      - ''
+      - '&e» &aClick to Open'
+    BUTTON_DTBROWSER:
+      Mapping: D
+      Material: ENDER_CHEST
+      Display: '&9Drop Table Browser'
+      Lore:
+      - ''
+      - '&cComing Soon?'
+      - ''
+      - '&e» &aClick to Open'
+    BUTTON_RANDOMSPAWNINGBROWSER:
+      Mapping: R
+      Material: ENDER_CHEST
+      Display: '&9Random Spawning Browser'
+      Lore:
+      - ''
+      - '&cComing Soon?'
+      - ''
+      - '&e» &aClick to Open'
+    BUTTON_SPAWNERBROWSER:
+      Mapping: S
+      Material: ENDER_CHEST
+      Display: '&9Spawner Browser'
+      Lore:
+      - ''
+      - '&cComing Soon?'
+      - ''
+      - '&e» &aClick to Open'

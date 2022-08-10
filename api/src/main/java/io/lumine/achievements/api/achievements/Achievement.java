@@ -14,7 +14,7 @@ import io.lumine.mythic.bukkit.utils.config.properties.PropertyHolder;
 import io.lumine.mythic.bukkit.utils.menu.MenuData;
 import lombok.Getter;
 
-public abstract class Achievement implements AchievementNode,PropertyHolder,MenuData<AchievementProfile> {
+public abstract class Achievement implements AchievementNode,PropertyHolder {
  
     @Getter private final AchievementManager manager;
     @Getter private final String key;

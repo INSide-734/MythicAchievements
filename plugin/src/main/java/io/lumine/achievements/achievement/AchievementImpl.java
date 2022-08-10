@@ -24,6 +24,10 @@ import io.lumine.achievements.api.achievements.AchievementFrame;
 import io.lumine.achievements.api.players.AchievementProfile;
 import io.lumine.achievements.config.Scope;
 import io.lumine.achievements.players.Profile;
+import io.lumine.mythic.api.adapters.AbstractEntity;
+import io.lumine.mythic.api.mobs.GenericCaster;
+import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.utils.Players;
 import io.lumine.mythic.bukkit.utils.adventure.text.Component;
 import io.lumine.mythic.bukkit.utils.adventure.text.TextReplacementConfig;
@@ -34,15 +38,25 @@ import io.lumine.mythic.bukkit.utils.config.properties.types.EnumProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.IntProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.LangProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.NodeListProp;
+import io.lumine.mythic.bukkit.utils.config.properties.types.StringListProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.StringProp;
 import io.lumine.mythic.bukkit.utils.items.ItemFactory;
 import io.lumine.mythic.bukkit.utils.logging.Log;
 import io.lumine.mythic.bukkit.utils.menu.Icon;
 import io.lumine.mythic.bukkit.utils.menu.IconBuilder;
+import io.lumine.mythic.bukkit.utils.menu.MenuData;
 import io.lumine.mythic.bukkit.utils.text.Text;
+import io.lumine.mythic.core.config.MythicLineConfigImpl;
+import io.lumine.mythic.core.drops.DropMetadataImpl;
+import io.lumine.mythic.core.drops.DropTable;
+import io.lumine.mythic.core.logging.MythicLogger;
+import io.lumine.mythic.core.logging.MythicLogger.DebugLevel;
+import io.lumine.mythic.core.skills.SkillMechanic;
+import io.lumine.mythic.core.skills.SkillTriggers;
+import io.lumine.mythic.core.skills.TriggeredSkill;
 import lombok.Getter;
 
-public class AchievementImpl extends Achievement {
+public class AchievementImpl extends Achievement implements MenuData<AchievementProfile> {
 
     protected static final StringProp NAMESPACE = Property.String(Scope.NONE, "Namespace", null);
     
@@ -57,6 +71,10 @@ public class AchievementImpl extends Achievement {
     protected static final IntProp MODEL = Property.Int(Scope.NONE, "Icon.Model");
     protected static final StringProp TEXTURE = Property.String(Scope.NONE, "Icon.SkullTexture");
 
+    protected static final StringProp REWARD_MESSAGE = Property.String(Scope.NONE, "Reward.Message", null);
+    protected static final StringListProp REWARD_DROPS = Property.StringList(Scope.NONE, "Reward.Drops");
+    protected static final StringListProp REWARD_SKILLS = Property.StringList(Scope.NONE, "Reward.Skills");
+    
     @Getter private final File file;
     @Getter private final NamespacedKey namespacedKey;
     
@@ -76,7 +94,9 @@ public class AchievementImpl extends Achievement {
     @Getter private Material iconMaterial;
     @Getter private int iconData;
     
-    //private final DropTable reward;
+    private final Component rewardMessage;
+    private final DropTable rewardDrops;
+    private final List<SkillMechanic> rewardSkills = Lists.newArrayList();
 
     @Getter private ItemStack menuItem;
     
@@ -99,6 +119,30 @@ public class AchievementImpl extends Achievement {
         
         this.iconMaterial = MATERIAL.fget(file,this);
         this.iconData = MODEL.fget(file,this);
+        
+        final var rMessage = REWARD_MESSAGE.fget(file,this);
+        if(rMessage == null) {
+            this.rewardMessage = null;
+        } else {
+            this.rewardMessage = Text.parse(rMessage);
+        }
+        
+        final List<String> drops = REWARD_DROPS.fget(file,this);
+        if(drops.isEmpty()) {
+            this.rewardDrops = null;
+        } else {
+            this.rewardDrops = new DropTable(file.getAbsolutePath(), "Achievement:"+getKey(), drops, true);
+        }
+        
+        final List<String> skills = REWARD_SKILLS.fget(file,this);
+        for(var line : skills)   {
+            line = MythicLineConfigImpl.unparseBlock(line);
+            var mechanic = MythicBukkit.inst().getSkillManager().getMechanic(line);
+
+            if(mechanic != null)    {
+                rewardSkills.add(mechanic);
+            }
+        }
     }
     
     public boolean initialize() {
@@ -233,7 +277,24 @@ public class AchievementImpl extends Achievement {
     
     @Override
     public void giveRewards(Player player) {
-        //Text.sendMessage(player, "rewards given");
+        if(this.rewardMessage != null) {
+            Text.sendMessage(player, rewardMessage);
+        }
+        if(this.rewardSkills != null) {
+            var aPlayer = BukkitAdapter.adapt(player);
+            
+            var ts = new TriggeredSkill(SkillTriggers.API, new GenericCaster(aPlayer), aPlayer.getLocation(), aPlayer, rewardSkills, true,
+                    (meta) -> {
+                        //meta.getVariables().putString("equip-slot", equippedSlot);
+                        //meta.getVariables().putObject("equip-item", itemStack);
+                    });
+        }
+        if(this.rewardDrops != null) {
+            var aPlayer = BukkitAdapter.adapt(player);
+            var meta = new DropMetadataImpl(new GenericCaster(aPlayer), aPlayer);
+            
+            rewardDrops.generate(meta).give(aPlayer);
+        }
     }
     
     @Override
