@@ -24,9 +24,7 @@ public class Configuration extends ReloadableModule<MythicAchievementsPlugin> im
     
     private static final IntProp CLOCK_INTERVAL = Property.Int(Scope.CONFIG, "Clock.Interval", 1);
     private static final EnumProp<StorageDriver> STORAGE_DRIVER = Property.Enum(Scope.CONFIG, StorageDriver.class, "Storage.Driver", StorageDriver.JSON); 
-    
-    
-    
+ 
     @Getter private boolean allowingMetrics = true;
     
     public Configuration(MythicAchievementsPlugin plugin)  {
@@ -46,24 +44,7 @@ public class Configuration extends ReloadableModule<MythicAchievementsPlugin> im
     public String getPropertyNode() {
         return "Configuration";
     }
-    
-    public Collection<File> getPackFolders() {
-        final File packsFolder = new File(getPlugin().getDataFolder() + System.getProperty("file.separator") + "packs");
-        final Collection<File> packs = Lists.newArrayList();
-        
-        if(!packsFolder.exists()) {
-            packsFolder.mkdir();
-        }
-        if(packsFolder.exists() && packsFolder.isDirectory()) {
-            for(var packFolder : packsFolder.listFiles()) {
-                if(packFolder.isDirectory()) {
-                    packs.add(packFolder);
-                }
-            }
-        }
-        return packs;
-    }
-    
+
     public int getClockInterval() {
         return CLOCK_INTERVAL.get(this);
     }
@@ -104,31 +85,6 @@ public class Configuration extends ReloadableModule<MythicAchievementsPlugin> im
             } else Log.error("Could not create directory!");
         }
         
-        if(!packFolder.exists()) {
-            if(!packFolder.mkdir()) {
-                Log.error("Could not create packs directory!");
-            }
-        } 
-        
-        if(!demoFolder.exists()) {
-            Log.info("Generating Starter Pack files...");
-
-            if(demoFolder.mkdir()) {
-                try {
-                    JarFile jarFile = new JarFile(getPlugin().getJarFile());
-                    for(Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements(); ) {
-                        String name = entries.nextElement().getName();
-                        if(name.startsWith(copyFolder + "/packs/") && name.length() > (copyFolder + "/packs/").length()) {
-                            Files.copy(getPlugin().getResource(name), new File(getPlugin().getDataFolder() + "/packs", name.split("/")[2]).toPath());
-                        }
-                    }
-                    jarFile.close();
-                } catch(IOException ex) {
-                    Log.error("Could not load starter pack files.");
-                    ex.printStackTrace();
-                }
-            } else Log.error("Could not create directory!");
-        }
     }
     
 }

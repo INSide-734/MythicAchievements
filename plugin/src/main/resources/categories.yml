@@ -1,0 +1,14 @@
+
+EXAMPLE_ACHIEVEMENTS:
+  Display: 'Example Achievements'
+  Description: 'You should make your own!'
+  Background: 'textures/block/quartz_pillar.png'
+  Icon:
+    Material: NETHER_STAR
+    
+MONSTER_HUNTING:
+  Display: 'Monster Hunting'
+  Description: 'Hunt down elite monsters'
+  Background: 'textures/block/polished_blackstone.png'
+  Icon:
+    Material: DRAGON_HEAD

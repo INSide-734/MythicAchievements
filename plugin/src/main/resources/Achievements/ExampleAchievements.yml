@@ -1,0 +1,87 @@
+
+STONE_COLD_BREAKER:
+  Display: 'Stone Cold Breaker'
+  Description: 'Break 64 Stone Blocks at Night'
+  Category: ExampleAchievements
+  Frame: TASK
+  Icon:
+    Material: Stone
+    Model: 0
+  Criteria:
+    1:
+      Type: BREAKBLOCKS
+      Block: STONE
+      Amount: 64
+      Conditions:
+      - night
+  Reward:
+    Message: 'You broke 64 stone blocks!'
+    Drops:
+    - cobblestone 64
+
+STONE_FIEND:
+  Display: 'Stone Fiend'
+  Description: 'Break 64 of each kind of special stone'
+  Category: ExampleAchievements
+  Parent: STONE_COLD_BREAKER
+  Frame: GOAL
+  Icon:
+    Material: ANDESITE   
+  Criteria:
+    ANDESITE:
+      Type: BREAK_BLOCK
+      Block: ANDESITE
+      Amount: 64
+    DIORITE:
+      Type: BREAK_BLOCK
+      Block: DIORITE
+      Amount: 64
+    GRANITE:
+      Type: BREAK_BLOCK
+      Block: GRANITE
+      Amount: 64
+  Reward:
+    Message: 'You broke 64 of each special stone block!'
+    Drops:
+    - 1 DIAMOND
+    Skills: []
+    
+THE_HARDEST_STONE:
+  Display: 'The Hardest Stone'
+  Description: 'Break 64 Diamond Ore'
+  Category: ExampleAchievements
+  Parent: STONE_FIEND
+  Frame: CHALLENGE
+  Icon:
+    Material: DIAMOND_ORE   
+  Criteria:
+    DIAMOND_ORE:
+      Type: BREAK_BLOCK
+      Block: DIAMOND_ORE
+      Amount: 64
+  Reward:
+    Message: 'You broke 64 of each special stone block!'
+    Drops:
+    - 5 EMERALD
+    Skills: []
+    
+DIGGING_DEEPER:
+  Display: 'Stone Fiend'
+  Description: 'Break 64 deepslate'
+  Category: ExampleAchievements
+  Parent: STONE_COLD_BREAKER
+  Criteria:
+    DEEPSLATE:
+      Type: BREAK_BLOCK
+      Block: DEEPSLATE
+      Amount: 64
+  Icon:
+    Material: DEEPSLATE   
+    Model: 1
+    Background: ''
+    Frame: ''
+  Reward:
+    Message: 'You broke 64 deepslate! Good job!'
+    Drops:
+    - 1 DIAMOND
+    Skills: []

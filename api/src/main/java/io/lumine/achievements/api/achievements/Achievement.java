@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import io.lumine.achievements.api.achievements.manager.AchievementManager;
 import io.lumine.achievements.api.players.AchievementProfile;
@@ -42,7 +43,7 @@ public abstract class Achievement implements AchievementNode,PropertyHolder {
     
     public abstract Material getIconMaterial();
     
-    public abstract int getIconData();
+    public abstract int getIconModel();
     
     public boolean hasParent() {
         return getParent().isPresent();
@@ -51,6 +52,8 @@ public abstract class Achievement implements AchievementNode,PropertyHolder {
     public abstract void subscribe(AchievementProfile player);
     
     public abstract void unsubscribe(AchievementProfile player);
+    
+    public abstract Collection<AchievementProfile> getSubscribedPlayers();
     
     public void incrementIfSubscribed(Player player, AchievementCriteria criteria) {
         incrementIfSubscribed(player, criteria, 1);

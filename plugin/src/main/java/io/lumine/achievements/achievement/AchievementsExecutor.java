@@ -5,8 +5,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.common.reflect.ClassPath;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.achievement.criteria.*;
@@ -15,11 +21,14 @@ import io.lumine.achievements.api.achievements.AchievementCategory;
 import io.lumine.achievements.api.achievements.AchievementCriteria;
 import io.lumine.achievements.api.achievements.manager.AchievementManager;
 import io.lumine.achievements.config.Scope;
+import io.lumine.achievements.utils.annotations.MythicAchievementCriteria;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.utils.config.properties.Property;
 import io.lumine.mythic.bukkit.utils.config.properties.types.NodeListProp;
 import io.lumine.mythic.bukkit.utils.files.Files;
 import io.lumine.mythic.bukkit.utils.logging.Log;
 import io.lumine.mythic.bukkit.utils.plugin.ReloadableModule;
+import io.lumine.mythic.core.logging.MythicLogger;
 import lombok.Getter;
 
 public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlugin> implements AchievementManager {
@@ -43,19 +52,43 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
     @Override
     public void load(MythicAchievementsPlugin plugin) {
     
+        var categoriesFile = new File(plugin.getDataFolder(), "categories.yml");
+        if(!categoriesFile.exists()) {
+            plugin.saveResource("categories.yml", false);
+        }
+        
         for(var node : CATEGORIES.get()) {
             var cat = new AchievementCategoryImpl(this, node);
 
             categories.put(cat.getKey(), cat);
-            Log.info("Loaded category {0}", node);
         }
 
-        final var achievementsDir = new File(plugin.getDataFolder(), "achievements");
+        final var achievementsDir = new File(plugin.getDataFolder(), "Achievements");
+        if(!achievementsDir.exists()) {
+            achievementsDir.mkdir();
+            plugin.saveResource("Achievements/ExampleAchievements.yml", false);
+            plugin.saveResource("Achievements/MonsterHunting.yml", false);
+        }
+        
         for(var file : Files.getAllYaml(achievementsDir.getAbsolutePath())) {
             for(var node : NODES.fget(file)) {
                 var achievement = new AchievementImpl(this, file, node);
-                Log.info("Loading achievement {0}", node);
+                //Log.info("Loading achievement {0}", node);
                 achievements.put(achievement.getKey(), achievement);
+            }
+        }
+        
+        for(var pack : MythicBukkit.inst().getPackManager().getPacks()) {
+            var folder = pack.getPackFolder("Achievements");
+            
+            if(folder.exists()) {
+                for(var file : Files.getAllYaml(folder.getAbsolutePath())) {
+                    for(var node : NODES.fget(file)) {
+                        var achievement = new AchievementImpl(this, file, node);
+                        //Log.info("Loading achievement {0} from pack {1}", node, pack.getName());
+                        achievements.put(achievement.getKey(), achievement);
+                    }
+                }
             }
         }
         
@@ -94,17 +127,6 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
         return Optional.ofNullable(categories.getOrDefault(key, null));
     }
 
-    @Override
-    public Optional<AchievementCriteria> getCriteria(Achievement achievement, String criteriaNode, String type) {
-        return Optional.ofNullable(
-                switch(type) {
-                    case "BREAK_BLOCK"      -> new BlockBreakTypeCriteria(criteriaNode, achievement);
-                    case "KILL_MOB_TYPE"    -> new KillMobTypeCriteria(criteriaNode, achievement);
-                    case "KILL_MYTHIC_MOB"  -> new KillMythicMobTypeCriteria(criteriaNode, achievement);
-                    default                 -> new ManualCriteria(criteriaNode, achievement);
-                });
-    }
-
     public void reinitializeOnlinePlayers() {
         
     }
@@ -115,6 +137,78 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
     
     public Collection<Achievement> getAchievements() {
         return Collections.unmodifiableCollection(achievements.values());
+    }
+    
+
+    /*================================================================================
+     * 
+     * CRITERIA
+     * 
+     *===============================================================================*/
+    
+    private static final Map<String, Class<? extends Criteria>> CRITERIA = new ConcurrentHashMap<>(); 
+    
+    public ImmutableMap<String,Class<? extends Criteria>> getCriteria() {
+        return ImmutableMap.copyOf(CRITERIA);
+    }
+
+    @Override
+    public Optional<AchievementCriteria> getCriteria(Achievement achievement, String criteriaNode, String type) {
+        type = type.replace("_", "");
+        
+        if(CRITERIA.containsKey(type.toUpperCase())) {
+            final Class<? extends Criteria> clazz = CRITERIA.get(type.toUpperCase());
+            
+            try {
+                return Optional.of(clazz.getConstructor(String.class, Achievement.class).newInstance(criteriaNode,achievement));
+            } catch (Exception e) {
+                MythicLogger.error("Failed to construct AchievementCriteria {0}", type);
+                e.printStackTrace();
+            }
+        } else {
+            return Optional.of(new ManualCriteria(criteriaNode,achievement));
+        }
+        return Optional.empty();
+    }
+        
+    /*================================================================================
+     * 
+     * ANNOTATION SHIT
+     * 
+     *===============================================================================*/
+    
+    static {
+        try {
+            Set<Class<?>> criteriaClasses = Sets.newConcurrentHashSet();
+            for(var i : ClassPath.from(MythicAchievementsPlugin.inst().getClass().getClassLoader()).getAllClasses()) {
+                try {
+                    if(i.getPackageName().equalsIgnoreCase("io.lumine.achievements.achievement.criteria")) {
+                        criteriaClasses.add(i.load());
+                    }
+                } catch(Exception | Error ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            for(Class<?> clazz : criteriaClasses) {
+                try {
+                    final var annotation = clazz.getAnnotation(MythicAchievementCriteria.class);
+                    final String name = annotation.name();
+                    final String[] aliases = annotation.aliases();
+                    
+                    if(Criteria.class.isAssignableFrom(clazz)) {
+                        CRITERIA.put(name.toUpperCase(), (Class<? extends Criteria>) clazz);
+                        for(String alias : aliases) {
+                            CRITERIA.put(alias.toUpperCase(), (Class<? extends Criteria>) clazz);
+                        }
+                    }
+                } catch(Exception ex) {
+                    MythicLogger.error("Failed to load AchievementCriteria class {0}", clazz.getCanonicalName());
+                }
+            }
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
     

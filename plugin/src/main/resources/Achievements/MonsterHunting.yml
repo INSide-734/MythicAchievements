@@ -1,0 +1,40 @@
+SKELETON_HUNTER:
+  Display: 'Skeleton Hunter'
+  Description: 'Kill 20 Skeletons at Night'
+  Category: MONSTER_HUNTING
+  Frame: GOAL
+  Icon:
+    Material: SKELETON_SKULL   
+    Model: 1
+  Criteria:
+    KILL:
+      Type: KILL_MOB_TYPE
+      EntityType: SKELETON
+      Amount: 20
+      Conditions:
+      - night
+  Reward:
+    Message: 'You killed 20 Skeletons!'
+    Drops:
+    - 20 EXPERIENCE
+    Skills: []
+
+KNIGHT_HUNTER:
+  Display: 'Knight Hunter'
+  Description: 'Kill 5 Skeletal Knights'
+  Category: MONSTER_HUNTING
+  Parent: SKELETON_HUNTER
+  Icon:
+    Material: SKELETON_SKULL   
+    Model: 1
+  Criteria:
+    KILL:
+      Type: KILL_MYTHIC_MOB
+      MobType: SkeletalKnight
+      Amount: 5
+      Conditions: []
+  Reward:
+    Message: 'You killed 5 Skeletal Knights!'
+    Drops:
+    - 50 EXPERIENCE
+    Skills: []

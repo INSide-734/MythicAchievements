@@ -91,8 +91,10 @@ public class AchievementImpl extends Achievement implements MenuData<Achievement
     @Getter private Collection<Achievement> children = Lists.newArrayList();
     private Map<String,AchievementCriteria> criteria = Maps.newConcurrentMap();
     
+    private ItemStack icon;
     @Getter private Material iconMaterial;
-    @Getter private int iconData;
+    @Getter private int iconModel;
+    @Getter private String iconNBT;
     
     private final Component rewardMessage;
     private final DropTable rewardDrops;
@@ -118,8 +120,12 @@ public class AchievementImpl extends Achievement implements MenuData<Achievement
         this.parentName = PARENT.fget(file,this);
         
         this.iconMaterial = MATERIAL.fget(file,this);
-        this.iconData = MODEL.fget(file,this);
         
+        this.iconModel = MODEL.fget(file,this);
+        
+        var icon = ItemFactory.of(iconMaterial).name(title).model(iconModel).hideAttributes().build();
+        this.iconNBT = MythicBukkit.inst().getVolatileCodeHandler().getItemHandler().dumpNBTData(icon);
+
         final var rMessage = REWARD_MESSAGE.fget(file,this);
         if(rMessage == null) {
             this.rewardMessage = null;
@@ -192,7 +198,7 @@ public class AchievementImpl extends Achievement implements MenuData<Achievement
         if(iconMaterial == Material.PLAYER_HEAD) {
             this.menuItem = ItemFactory.of(this.iconMaterial)
                     .name(Text.colorize(this.getTitle()))
-                    .model(iconData)
+                    .model(iconModel)
                     .hideAttributes()
                     .lore(description)
                     .skullTexture(TEXTURE.get(this))
@@ -200,7 +206,7 @@ public class AchievementImpl extends Achievement implements MenuData<Achievement
         } else {
             this.menuItem = ItemFactory.of(this.iconMaterial)
                     .name(Text.colorize(this.getTitle()))
-                    .model(iconData)
+                    .model(iconModel)
                     .hideAttributes()
                     .lore(description)
                     .build();
@@ -227,6 +233,11 @@ public class AchievementImpl extends Achievement implements MenuData<Achievement
                 criteria.unloadListeners();
             }
         }
+    }
+    
+    @Override
+    public Collection<AchievementProfile> getSubscribedPlayers() {
+        return subscribedPlayers.values();
     }
 
     public void incrementIfSubscribed(Player player, AchievementCriteria criteria, int amount) {

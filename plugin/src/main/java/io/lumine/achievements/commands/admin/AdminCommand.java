@@ -18,7 +18,6 @@ public class AdminCommand extends Command<MythicAchievementsPlugin> {
         super(plugin);
         
         addSubCommands(
-                new GenerateCommand(this),
                 new ReloadCommand(this),
                 new VersionCommand(this),
                 new GrantCommand(this),

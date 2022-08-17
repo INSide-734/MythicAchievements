@@ -7,12 +7,14 @@ import io.lumine.achievements.achievement.Criteria;
 import io.lumine.achievements.api.achievements.Achievement;
 import io.lumine.achievements.api.players.AchievementProfile;
 import io.lumine.achievements.config.Scope;
+import io.lumine.achievements.utils.annotations.MythicAchievementCriteria;
 import io.lumine.mythic.bukkit.utils.Events;
 import io.lumine.mythic.bukkit.utils.config.properties.Property;
 import io.lumine.mythic.bukkit.utils.config.properties.types.StringProp;
 import io.lumine.mythic.bukkit.utils.logging.Log;
 import io.lumine.mythic.bukkit.utils.menu.Icon;
 
+@MythicAchievementCriteria(name="blockBreak", aliases={"breakBlock","breakBlockType","breakBlocks"})
 public class BlockBreakTypeCriteria extends Criteria {
 
     private final StringProp BLOCK_TYPE = Property.String(Scope.NONE, "Block");

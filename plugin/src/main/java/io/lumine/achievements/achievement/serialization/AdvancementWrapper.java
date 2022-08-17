@@ -58,11 +58,12 @@ public class AdvancementWrapper {
     private class MythicAdvancementIcon {
         
         private final String item;
-        //private final int data;
+        private final String nbt;
         
         public MythicAdvancementIcon(AchievementImpl achieve) {
             this.item = achieve.getIconMaterial().name().toLowerCase();
-            //this.data = achieve.getIconData();
+            this.nbt = achieve.getIconNBT();
+            
         }
     }
     

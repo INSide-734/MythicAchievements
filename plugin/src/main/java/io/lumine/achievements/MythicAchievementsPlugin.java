@@ -19,6 +19,9 @@ import io.lumine.mythic.bukkit.utils.logging.Log;
 import io.lumine.mythic.bukkit.utils.plugin.LuminePlugin;
 import io.lumine.mythic.bukkit.utils.version.ServerVersion;
 import lombok.Getter;
+
+import java.io.File;
+
 import org.bukkit.Bukkit;
 
 public class MythicAchievementsPlugin extends LuminePlugin {
@@ -74,6 +77,11 @@ public class MythicAchievementsPlugin extends LuminePlugin {
             MCLogger.log("The server is running Spigot; disabled PaperSpigot exclusive functionality");
         }
 
+        var categoriesFile = new File(getDataFolder(), "categories.yml");
+        if(!categoriesFile.exists()) {
+            saveResource("categories.yml", false);
+        }
+        
         this.saveDefaultConfig();
         
         configuration = new Configuration(this);
@@ -105,7 +113,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
         this.baseCommand = new BaseCommand(this);
         this.adminCommand = new AdminCommand(this);
 
-        this.registerCommand("achievements", baseCommand);
+        //this.registerCommand("achievements", baseCommand);
         this.registerCommand("mythicachievements", adminCommand);
 
         if(configuration.isAllowingMetrics())  {
