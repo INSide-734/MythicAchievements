@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.google.common.collect.Sets;
 
@@ -18,15 +19,15 @@ import io.lumine.mythic.bukkit.utils.config.properties.types.StringProp;
 import io.lumine.mythic.bukkit.utils.logging.Log;
 import io.lumine.mythic.bukkit.utils.menu.Icon;
 
-@MythicAchievementCriteria(name="blockBreak", aliases={"breakBlock","breakBlockType","breakBlocks"})
-public class BlockBreakTypeCriteria extends Criteria {
+@MythicAchievementCriteria(name="blockPlace", aliases={"placeBlock","placeBlockType","placeBlocks"})
+public class BlockPlaceTypeCriteria extends Criteria {
 
     private final StringProp BLOCK_TYPE = Property.String(Scope.NONE, "Block");
     
     private final String blockType;
     private final Set<Material> blocks = Sets.newConcurrentHashSet();
     
-    public BlockBreakTypeCriteria(String criteriaNode, Achievement holder) {
+    public BlockPlaceTypeCriteria(String criteriaNode, Achievement holder) {
         super(criteriaNode, holder);
         
         this.blockType = BLOCK_TYPE.fget(holder.getFile(), this);
@@ -35,13 +36,13 @@ public class BlockBreakTypeCriteria extends Criteria {
             try {
                 this.blocks.add(Material.valueOf(spl));
             } catch(Exception | Error ex) {
-                Log.error("Invalid material type {0} for BlockBreakCriteria", spl);
+                Log.error("Invalid material type {0} for BlockPlaceCriteria", spl);
             }
         }
     }
     
     public void load() {
-        Events.subscribe(BlockBreakEvent.class)
+        Events.subscribe(BlockPlaceEvent.class)
             .filter(event -> blocks.contains(event.getBlock().getType()))
             .handler(event -> {
                 final var player = event.getPlayer();

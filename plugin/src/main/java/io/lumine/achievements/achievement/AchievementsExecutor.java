@@ -57,10 +57,16 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
             plugin.saveResource("categories.yml", false);
         }
         
+        int categoriesAdded = 0;
         for(var node : CATEGORIES.get()) {
             var cat = new AchievementCategoryImpl(this, node);
 
             categories.put(cat.getKey(), cat);
+            categoriesAdded++;
+            
+            if(!plugin.isPremium() && categoriesAdded >= MFCAT) {
+                break;
+            }
         }
 
         final var achievementsDir = new File(plugin.getDataFolder(), "Achievements");
@@ -70,11 +76,21 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
             plugin.saveResource("Achievements/MonsterHunting.yml", false);
         }
         
+        int achievementsAdded = 0;
         for(var file : Files.getAllYaml(achievementsDir.getAbsolutePath())) {
             for(var node : NODES.fget(file)) {
                 var achievement = new AchievementImpl(this, file, node);
                 //Log.info("Loading achievement {0}", node);
                 achievements.put(achievement.getKey(), achievement);
+                
+                achievementsAdded++;
+                if(!plugin.isPremium() && achievementsAdded >= MFACH) {
+                    break;
+                }
+            }
+
+            if(!plugin.isPremium() && achievementsAdded >= MFACH) {
+                break;
             }
         }
         
@@ -87,8 +103,20 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
                         var achievement = new AchievementImpl(this, file, node);
                         //Log.info("Loading achievement {0} from pack {1}", node, pack.getName());
                         achievements.put(achievement.getKey(), achievement);
+                        
+                        achievementsAdded++;
+                        if(!plugin.isPremium() && achievementsAdded >= MFACH) {
+                            break;
+                        }
+                    }
+                    if(!plugin.isPremium() && achievementsAdded >= MFACH) {
+                        break;
                     }
                 }
+            }
+
+            if(!plugin.isPremium() && achievementsAdded >= MFACH) {
+                break;
             }
         }
         
@@ -210,5 +238,8 @@ public class AchievementsExecutor extends ReloadableModule<MythicAchievementsPlu
             ex.printStackTrace();
         }
     }
+
+    private static final int MFCAT = 2;
+    private static final int MFACH = 10;
 }
     
