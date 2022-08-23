@@ -13,7 +13,7 @@
     </organization>
   
 	<properties>  
-	    <mythicachievements.version>0.0.2</mythicachievements.version>
+	    <mythicachievements.version>0.0.3-SNAPSHOT</mythicachievements.version>
 	    <paperapi.version>1.19-R0.1-SNAPSHOT</paperapi.version>
 	    <mythic.version>5.1.2-SNAPSHOT</mythic.version>
 	    <lombok.version>1.18.22</lombok.version>

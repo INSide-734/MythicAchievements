@@ -21,6 +21,9 @@ public class MythicMobsCompat {
                 case "GRANTACHIEVEMENT": case "GIVEACHIEVEMENT":
                     event.register(new GrantAchievementMechanic(plugin, event.getConfig()));
                     break;
+                case "INCREMENTACHIEVEMENT": case "PROGRESSACHIEVEMENT":
+                    event.register(new IncrementAchievementMechanic(plugin, event.getConfig()));
+                    break;
                 default:
             }
         }).bindWith(plugin);

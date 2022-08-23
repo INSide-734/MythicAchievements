@@ -8,6 +8,7 @@ import com.google.common.collect.Sets;
 
 import io.lumine.achievements.api.achievements.Achievement;
 import io.lumine.achievements.api.achievements.AchievementCriteria;
+import io.lumine.mythic.bukkit.utils.logging.Log;
 
 public class AchievementProgress {
 
@@ -20,7 +21,7 @@ public class AchievementProgress {
         }
         
         int newValue = progress.merge(criteria.getKey(), amount, (o,n) -> o + n);
-        
+        Log.info("Amount {0} newAmount {1} Requried {2}", amount, newValue, criteria.getAmount());
         if(newValue >= criteria.getAmount()) {
             completed.add(criteria.getKey());
             return 0;

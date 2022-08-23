@@ -31,7 +31,7 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
     private Map<String,AchievementProgress> achievementProgress = Maps.newConcurrentMap();
     private Map<String,CompletedAchievement> completedAchievements = Maps.newConcurrentMap();
     
-    private transient Collection<Achievement> subscribedAchievements = Sets.newHashSet();
+    @Getter private transient Collection<Achievement> subscribedAchievements = Sets.newHashSet();
     
     @Getter private transient ProfileManager manager;
     @Getter private transient Player player;
@@ -89,6 +89,7 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
         progress.incrementProgress(criteria, amount);
         
         if(progress.hasCompleted(achievement)) {
+            Log.info("Completed?");
             completeAchievement(achievement, true);
         }
     }
