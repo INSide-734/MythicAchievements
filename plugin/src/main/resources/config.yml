@@ -3,3 +3,9 @@ Configuration:
     Language: 'english-us'
   Storage:
     Driver: JSON
+  DisabledVanillaCategories:
+  - STORY
+  - ADVENTURE
+  - HUSBANDRY
+  - NETHER
+  - END

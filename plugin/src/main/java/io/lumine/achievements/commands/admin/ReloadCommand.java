@@ -21,6 +21,7 @@ public class ReloadCommand extends Command<MythicAchievementsPlugin> {
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         getPlugin().reloadConfiguration();
+        getPlugin().getConfiguration().reload();
 
         getPlugin().getMenuManager().reload();
         getPlugin().getAchievementManager().reload();
@@ -30,7 +31,7 @@ public class ReloadCommand extends Command<MythicAchievementsPlugin> {
         getPlugin().getProfiles().getKnownProfiles().forEach(profile -> profile.rebuildAchievements());
         
         CommandHelper.sendSuccess(sender, Property.String(Scope.CONFIG,
-                "Configuration.Language.Reloaded","MythicAchievements has been reloaded.").get());
+                "Configuration.Language.Reloaded", "MythicAchievements has been reloaded.").get());
         return true;
     }
 
