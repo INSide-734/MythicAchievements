@@ -26,8 +26,6 @@ public class ReloadCommand extends Command<MythicAchievementsPlugin> {
         getPlugin().getMenuManager().reload();
         getPlugin().getAchievementManager().reload();
         
-        ((AchievementsExecutor) getPlugin().getAchievementManager()).getAdvancementGUIManager().registerAdvancements();
-        
         getPlugin().getProfiles().getKnownProfiles().forEach(profile -> profile.rebuildAchievements());
         
         CommandHelper.sendSuccess(sender, Property.String(Scope.CONFIG,

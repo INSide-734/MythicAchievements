@@ -110,7 +110,6 @@ public class AchievementImpl extends Achievement implements MenuData<Achievement
         super(manager, key);
         
         this.file = file;
-        this.namespacedKey = new NamespacedKey(manager.getPlugin(), key);
 
         this.title = DISPLAY.fget(file,this);
         this.description = DESCRIPTION.fget(file,this);
@@ -118,6 +117,9 @@ public class AchievementImpl extends Achievement implements MenuData<Achievement
         
         this.categoryName = CATEGORY.fget(file,this);
         this.parentName = PARENT.fget(file,this);
+        
+        var nkey = (categoryName != null) ? categoryName + "/" + key : key;
+        this.namespacedKey = new NamespacedKey(manager.getPlugin(), nkey);
         
         this.iconMaterial = MATERIAL.fget(file,this);
         

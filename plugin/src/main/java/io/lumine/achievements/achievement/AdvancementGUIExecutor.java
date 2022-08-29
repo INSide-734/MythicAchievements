@@ -8,6 +8,8 @@ import org.bukkit.NamespacedKey;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.achievement.serialization.MCMetaWrapper;
+import io.lumine.achievements.achievement.serialization.VanillaDisabledAdvancement;
+import io.lumine.achievements.achievement.serialization.VanillaDisabledAdvancementTab;
 import io.lumine.achievements.api.achievements.Achievement;
 import io.lumine.mythic.bukkit.utils.files.Folders;
 import io.lumine.mythic.bukkit.utils.gson.GsonProvider;
@@ -82,17 +84,11 @@ public class AdvancementGUIExecutor extends ReloadableModule<MythicAchievementsP
             if(namespace.getNamespace().equals(achieveKey.getNamespace())) {
                 Bukkit.getUnsafe().removeAdvancement(achieveKey);
             }
-            
-            if(achieveKey.getNamespace().equalsIgnoreCase(NamespacedKey.MINECRAFT)) {
-                Log.info("removing {0}", achieveKey.toString());
-                Bukkit.getUnsafe().removeAdvancement(achieveKey);
-            }
         }
         Bukkit.reloadData();
     }
     
     public void disableVanillaAdvancements() {
-        var advancements = Bukkit.advancementIterator();
         var namespace = NamespacedKey.MINECRAFT;
         
         var world = Bukkit.getWorlds().get(0);
@@ -112,9 +108,8 @@ public class AdvancementGUIExecutor extends ReloadableModule<MythicAchievementsP
         }
         
         if(!mcmetaFile.exists()) {
-            final var out = new MCMetaWrapper();
             try(var writer = new FileWriter(mcmetaFile)) {
-                GsonProvider.get().toJson(out, writer);
+                GsonProvider.get().toJson(new MCMetaWrapper(), writer);
                 writer.flush();
             } catch(Exception | Error ex) {
                 ex.printStackTrace();
@@ -130,10 +125,39 @@ public class AdvancementGUIExecutor extends ReloadableModule<MythicAchievementsP
             
             var storyFile = new File(tabFolder, "root.json");
             
-            try {
-                storyFile.createNewFile();
-            } catch(Exception | Error ex) {
-                ex.printStackTrace();
+            if(!storyFile.exists()) {
+                try(var writer = new FileWriter(storyFile)) {
+                    GsonProvider.get().toJson(new VanillaDisabledAdvancement(), writer);
+                    writer.flush();
+                } catch(Exception | Error ex) {
+                    ex.printStackTrace();
+                }
+            }
+            
+            var advancements = Bukkit.advancementIterator();
+            
+            while(advancements.hasNext()) {
+                var adv = advancements.next();
+                var advKey = adv.getKey();
+                
+                if(advKey.getNamespace().equalsIgnoreCase(NamespacedKey.MINECRAFT)) {
+                    if(advKey.getKey().startsWith(tab.getFolder())) {
+                        var advPathName = advKey.getKey().substring(0, advKey.getKey().lastIndexOf('/'));
+                        var advFileName = advKey.getKey().substring(advKey.getKey().lastIndexOf('/') + 1);
+                        
+                        var advPath = new File(dataFolder, advPathName);
+                        var advFile = new File(advPath, advFileName + ".json");
+
+                        if(!advFile.exists()) {
+                            try(var writer = new FileWriter(advFile)) {
+                                GsonProvider.get().toJson(new VanillaDisabledAdvancement(), writer);
+                                writer.flush();
+                            } catch(Exception | Error ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }
             }
         }
     }
