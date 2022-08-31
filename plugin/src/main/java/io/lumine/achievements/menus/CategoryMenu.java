@@ -8,18 +8,18 @@ import com.google.common.collect.Lists;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.api.achievements.AchievementCategory;
-import io.lumine.achievements.players.Profile;
+import io.lumine.achievements.players.ProfileImpl;
 import io.lumine.mythic.bukkit.utils.config.properties.types.MenuProp;
 import io.lumine.mythic.bukkit.utils.menu.EditableMenuBuilder;
 
-public class CategoryMenu extends AchievementMenu<Profile> {
+public class CategoryMenu extends AchievementMenu<ProfileImpl> {
 
     public CategoryMenu(MythicAchievementsPlugin core, MenuManager manager) {
         super(core, manager, new MenuProp(core, "menus/categories", "Menu", null));
     }
 
     @Override
-    public EditableMenuBuilder<Profile> build(EditableMenuBuilder<Profile> builder) {
+    public EditableMenuBuilder<ProfileImpl> build(EditableMenuBuilder<ProfileImpl> builder) {
 
         return builder;
     }

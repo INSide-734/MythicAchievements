@@ -1,7 +1,7 @@
 package io.lumine.achievements.compat;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
-import io.lumine.achievements.players.Profile;
+import io.lumine.achievements.players.ProfileImpl;
 import io.lumine.core.LumineCore;
 import io.lumine.core.players.PlayerProfile;
 import io.lumine.core.utils.gson.GsonProvider;
@@ -28,7 +28,7 @@ public class LumineCoreCompat {
         return new LumineCoreStorageDriver(plugin);
     }
     
-    public class LumineCoreStorageDriver extends PluginModule<MythicAchievementsPlugin> implements PlayerStorageAdapter<Profile> {
+    public class LumineCoreStorageDriver extends PluginModule<MythicAchievementsPlugin> implements PlayerStorageAdapter<ProfileImpl> {
 
         private final LumineCore core;
         
@@ -46,8 +46,8 @@ public class LumineCoreCompat {
         public void unload() {}
         
         @Override
-        public Promise<Optional<Profile>> load(UUID uuid) {
-            final Promise<Optional<Profile>> promise = Promise.empty();
+        public Promise<Optional<ProfileImpl>> load(UUID uuid) {
+            final Promise<Optional<ProfileImpl>> promise = Promise.empty();
 
             core.getProfiles().getProfile(uuid).thenAcceptAsync(maybeCoreProfile -> {
                 if(maybeCoreProfile.isPresent()) {
@@ -60,8 +60,8 @@ public class LumineCoreCompat {
         }
 
         @Override
-        public Promise<Optional<Profile>> loadByName(String name) {
-            final Promise<Optional<Profile>> promise = Promise.empty();
+        public Promise<Optional<ProfileImpl>> loadByName(String name) {
+            final Promise<Optional<ProfileImpl>> promise = Promise.empty();
 
             core.getProfiles().getProfile(name).thenAcceptAsync(maybeCoreProfile -> {
                 if(maybeCoreProfile.isPresent()) {
@@ -75,11 +75,11 @@ public class LumineCoreCompat {
 
 
         @Override
-        public Promise save(UUID uuid, Profile arg1) {
+        public Promise save(UUID uuid, ProfileImpl arg1) {
             return Promise.completed(true);
         }
 
-        public boolean saveSync(UUID key, Profile profile) {
+        public boolean saveSync(UUID key, ProfileImpl profile) {
             File file = getFile(key.toString());
 
             if(!file.exists()) {
@@ -109,8 +109,8 @@ public class LumineCoreCompat {
     }
 
 
-    private Optional<Profile> getFromCoreProfile(PlayerProfile coreProfile) {
-            var maybeProfile = coreProfile.getMetadata("MCCOSMETICS", Profile.class);
+    private Optional<ProfileImpl> getFromCoreProfile(PlayerProfile coreProfile) {
+            var maybeProfile = coreProfile.getMetadata("MCCOSMETICS", ProfileImpl.class);
             
             if(maybeProfile.isPresent()) {
                 return Optional.of(maybeProfile.get());

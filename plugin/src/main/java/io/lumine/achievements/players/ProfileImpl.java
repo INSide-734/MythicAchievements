@@ -1,28 +1,29 @@
 package io.lumine.achievements.players;
 
-import io.lumine.achievements.achievement.AchievementImpl;
+import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.achievement.AchievementProgress;
 import io.lumine.achievements.achievement.CompletedAchievement;
+import io.lumine.achievements.api.MythicAchievements;
 import io.lumine.achievements.api.achievements.Achievement;
 import io.lumine.achievements.api.achievements.AchievementCriteria;
 import io.lumine.achievements.api.players.AchievementProfile;
 import io.lumine.achievements.constants.Constants;
+import io.lumine.achievements.storage.sql.SqlStorage;
+import io.lumine.achievements.storage.sql.jooq.Keys;
+import io.lumine.achievements.storage.sql.jooq.tables.records.ProfileRecord;
 import io.lumine.mythic.bukkit.utils.logging.Log;
 import lombok.Getter;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils.storage.players.Profile {
+public class ProfileImpl implements AchievementProfile,io.lumine.mythic.bukkit.utils.storage.players.Profile {
 
     @Getter private UUID uniqueId;
     @Getter private String name;
@@ -36,11 +37,41 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
     @Getter private transient ProfileManager manager;
     @Getter private transient Player player;
     
-    public Profile() {}
+    public ProfileImpl() {}
     
-    public Profile(UUID id, String name) {
+    public ProfileImpl(UUID id, String name) {
         this.uniqueId = id;
         this.name = name;
+    }
+    
+    public ProfileImpl(UUID id, String name, long timestamp) {
+        this.uniqueId = id;
+        this.name = name;
+        this.timestamp = timestamp;
+    }
+    
+    public void loadFromSql(ProfileRecord profileRecord) {
+        var fetchProgress = profileRecord.fetchChildren(Keys.MYTHICACHIEVEMENTS_PROFILE_PROGRESS_UUID_FK);
+        
+        for(var result : fetchProgress) {
+            var achieve = result.getAchievement();
+            var criteria = result.getCriteria();
+            var progress = result.getProgress();
+
+            var progressEntry = achievementProgress.getOrDefault(achieve, null);
+            
+            if(progressEntry == null) {
+                progressEntry = new AchievementProgress();
+                achievementProgress.put(achieve, progressEntry);
+            }
+            progressEntry.setCriteriaProgress(criteria, progress);
+        }
+        
+        var fetchCompleted = profileRecord.fetchChildren(Keys.MYTHICACHIEVEMENTS_PROFILE_COMPLETED_FK);
+        for(var result : fetchCompleted) {
+            var achieve = result.getAchievement();
+            completedAchievements.put(achieve, new CompletedAchievement(result));
+        }
     }
     
     public void initialize(ProfileManager manager, final Player player)  {
@@ -86,10 +117,8 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
             progress = new AchievementProgress();
             achievementProgress.put(achievement.getKey(), progress);
         }
-        progress.incrementProgress(criteria, amount);
         
-        if(progress.hasCompleted(achievement)) {
-            Log.info("Completed?");
+        if(progress.incrementProgress(this, achievement, criteria, amount)) {
             completeAchievement(achievement, true);
         }
     }
@@ -98,14 +127,21 @@ public class Profile implements AchievementProfile,io.lumine.mythic.bukkit.utils
         if(!achievementProgress.containsKey(achieve.getKey())) {
             return;
         }
+        
+        final var completed = new CompletedAchievement(achieve);
+        
         achievementProgress.remove(achieve.getKey());
-        completedAchievements.put(achieve.getKey(), new CompletedAchievement(achieve));
+        completedAchievements.put(achieve.getKey(), completed);
         unsubscribeFromAchievement(achieve);
         
         achieve.sendCompletedMessage(player);
         
         if(giveRewards) {
             achieve.giveRewards(player);
+        }
+        
+        if(manager.getAdapter() instanceof SqlStorage sqlStorage) {
+            sqlStorage.saveCompletedAchievement(this, achieve.getKey(), completed);
         }
         
         subscribedOrCompleted(achieve);

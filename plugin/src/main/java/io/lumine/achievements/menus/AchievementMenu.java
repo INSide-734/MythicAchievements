@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.api.MythicAchievements;
-import io.lumine.achievements.players.Profile;
+import io.lumine.achievements.players.ProfileImpl;
 import io.lumine.mythic.bukkit.utils.config.properties.types.MenuProp;
 import io.lumine.mythic.bukkit.utils.menu.EditableMenuBuilder;
 import io.lumine.mythic.bukkit.utils.menu.ReloadableMenu;
@@ -28,7 +28,7 @@ public abstract class AchievementMenu<T> extends ReloadableMenu<T> {
     }
     
     public void openMenu(Player player) {
-        Profile profile = plugin.getProfiles().getProfile(player);
+        ProfileImpl profile = plugin.getProfiles().getProfile(player);
 
         //boolean b = profile.getHatIsActive();
         
@@ -38,7 +38,7 @@ public abstract class AchievementMenu<T> extends ReloadableMenu<T> {
         //profile.setHatIsActive(b);
     }
     
-    public EditableMenuBuilder<Profile> addPageButtons(EditableMenuBuilder<Profile> builder) {
+    public EditableMenuBuilder<ProfileImpl> addPageButtons(EditableMenuBuilder<ProfileImpl> builder) {
         builder.getIcon("NEXT_PAGE").ifPresent(icon -> {
             icon.getBuilder().click((profile,player) -> {
                 playMenuClick(player);

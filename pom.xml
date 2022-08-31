@@ -13,9 +13,9 @@
     </organization>
   
 	<properties>  
-	    <mythicachievements.version>0.0.4-SNAPSHOT</mythicachievements.version>
+	    <mythicachievements.version>0.0.5-SNAPSHOT</mythicachievements.version>
 	    <paperapi.version>1.19-R0.1-SNAPSHOT</paperapi.version>
-	    <mythic.version>5.1.2-SNAPSHOT</mythic.version>
+	    <mythic.version>5.1.4</mythic.version>
 	    <lombok.version>1.18.22</lombok.version>
     	<!--suppress UnresolvedMavenProperty -->
 		<build.number>${CI_COMMIT_SHORT_SHA}</build.number>

@@ -9,9 +9,11 @@ import io.lumine.mythic.bukkit.utils.config.properties.Property;
 import io.lumine.mythic.bukkit.utils.config.properties.PropertyHolder;
 import io.lumine.mythic.bukkit.utils.config.properties.types.EnumProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.IntProp;
+import io.lumine.mythic.bukkit.utils.config.properties.types.SqlCredentialsProp;
 import io.lumine.mythic.bukkit.utils.config.properties.types.StringListProp;
 import io.lumine.mythic.bukkit.utils.logging.Log;
 import io.lumine.mythic.bukkit.utils.plugin.ReloadableModule;
+import io.lumine.mythic.bukkit.utils.storage.sql.SqlCredentials;
 import lombok.Getter;
 
 import java.util.Collection;
@@ -20,7 +22,8 @@ public class Configuration extends ReloadableModule<MythicAchievementsPlugin> im
     
     private static final IntProp CLOCK_INTERVAL = Property.Int(Scope.CONFIG, "Clock.Interval", 1);
     private static final EnumProp<StorageDriver> STORAGE_DRIVER = Property.Enum(Scope.CONFIG, StorageDriver.class, "Storage.Driver", StorageDriver.JSON); 
-
+    private static final SqlCredentialsProp SQL_CREDENTIALS = Property.SqlCredentials(Scope.CONFIG, "Storage");
+    
     private static final StringListProp DISABLED_VANILLA_ADV = Property.StringList(Scope.CONFIG, "DisabledVanillaCategories");
     
     @Getter private Collection<VanillaAchievements> disabledVanillaCategories = Sets.newHashSet();
@@ -58,6 +61,10 @@ public class Configuration extends ReloadableModule<MythicAchievementsPlugin> im
     
     public StorageDriver getStorageType() {
         return STORAGE_DRIVER.get(this);
+    }
+    
+    public SqlCredentials getSqlCredentials() {
+        return SQL_CREDENTIALS.get(this);
     }
     
 }

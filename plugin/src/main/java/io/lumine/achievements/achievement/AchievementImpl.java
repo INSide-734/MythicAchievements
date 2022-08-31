@@ -23,7 +23,7 @@ import io.lumine.achievements.api.achievements.AchievementCriteria;
 import io.lumine.achievements.api.achievements.AchievementFrame;
 import io.lumine.achievements.api.players.AchievementProfile;
 import io.lumine.achievements.config.Scope;
-import io.lumine.achievements.players.Profile;
+import io.lumine.achievements.players.ProfileImpl;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.mobs.GenericCaster;
 import io.lumine.mythic.bukkit.BukkitAdapter;
@@ -243,7 +243,7 @@ public class AchievementImpl extends Achievement implements MenuData<Achievement
     }
 
     public void incrementIfSubscribed(Player player, AchievementCriteria criteria, int amount) {
-        var sub = (Profile) subscribedPlayers.get(player.getUniqueId());
+        var sub = (ProfileImpl) subscribedPlayers.get(player.getUniqueId());
 
         if(sub != null) {
             sub.incrementAchievementStat(this, criteria, amount);

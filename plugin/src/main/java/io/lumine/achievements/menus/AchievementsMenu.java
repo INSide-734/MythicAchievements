@@ -9,19 +9,19 @@ import com.google.common.collect.Lists;
 import io.lumine.achievements.MythicAchievementsPlugin;
 import io.lumine.achievements.api.achievements.Achievement;
 import io.lumine.achievements.api.achievements.AchievementCategory;
-import io.lumine.achievements.players.Profile;
+import io.lumine.achievements.players.ProfileImpl;
 import io.lumine.mythic.bukkit.utils.config.properties.types.MenuProp;
 import io.lumine.mythic.bukkit.utils.logging.Log;
 import io.lumine.mythic.bukkit.utils.menu.EditableMenuBuilder;
 
-public class AchievementsMenu extends AchievementMenu<Profile> {
+public class AchievementsMenu extends AchievementMenu<ProfileImpl> {
 
     public AchievementsMenu(MythicAchievementsPlugin core, MenuManager manager) {
         super(core, manager, new MenuProp(core, "menus/achievements", "Menu", null));
     }
 
     @Override
-    public EditableMenuBuilder<Profile> build(EditableMenuBuilder<Profile> builder) {
+    public EditableMenuBuilder<ProfileImpl> build(EditableMenuBuilder<ProfileImpl> builder) {
 
         return builder;
     }

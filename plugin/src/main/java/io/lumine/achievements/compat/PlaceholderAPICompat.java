@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
-import io.lumine.achievements.players.Profile;
+import io.lumine.achievements.players.ProfileImpl;
 
 public class PlaceholderAPICompat extends PlaceholderExpansion {
 
@@ -17,7 +17,7 @@ public class PlaceholderAPICompat extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
-        Profile profile = plugin.getProfiles().getProfile(player);
+        ProfileImpl profile = plugin.getProfiles().getProfile(player);
 
         switch (identifier) {
             default:

@@ -1,46 +1,52 @@
 package io.lumine.achievements.players;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
-import io.lumine.mythic.bukkit.utils.Events;
-import io.lumine.mythic.bukkit.utils.logging.Log;
+import io.lumine.achievements.storage.sql.SqlStorage;
 import io.lumine.mythic.bukkit.utils.storage.players.PlayerRepository;
 import io.lumine.mythic.bukkit.utils.storage.players.adapters.file.JsonPlayerStorageAdapter;
-import org.bukkit.GameMode;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import io.lumine.mythic.bukkit.utils.storage.sql.SqlConnector;
 
-import java.util.Optional;
+import org.bukkit.entity.Player;
 import java.util.UUID;
 
-public class ProfileManager extends PlayerRepository<MythicAchievementsPlugin,Profile> {
+public class ProfileManager extends PlayerRepository<MythicAchievementsPlugin,ProfileImpl> {
 
     public ProfileManager(MythicAchievementsPlugin plugin) {
-        super(plugin, Profile.class);
+        super(plugin, ProfileImpl.class);
         
-        switch(plugin.getConfiguration().getStorageType()) {
-            case LUMINE:
-                this.initialize(plugin.getCompatibility().getLumineCore().get().getStorageDriver());
-                break;
-            default:
-                this.initialize(new JsonPlayerStorageAdapter<>(plugin,Profile.class));
-                break;
+        if(plugin.getConfiguration().getStorageType().isSql()) {
+            
+            final var provider = plugin.getConfiguration().getStorageType().getSqlProvider();
+            final var credentials = plugin.getConfiguration().getSqlCredentials();
+            
+            final var connector = new SqlConnector(plugin, provider, credentials);
+            
+            this.initialize(new SqlStorage<>(this,connector));
+        } else {
+            switch(plugin.getConfiguration().getStorageType()) {
+                case LUMINE:
+                    this.initialize(plugin.getCompatibility().getLumineCore().get().getStorageDriver());
+                    break;
+                default:
+                    this.initialize(new JsonPlayerStorageAdapter<>(plugin,ProfileImpl.class));
+                    break;
+            }
         }
-
     }
 
     @Override
-    public Profile createProfile(UUID id, String name) {
-        return new Profile(id,name);
+    public ProfileImpl createProfile(UUID id, String name) {
+        return new ProfileImpl(id,name);
     }
 
     @Override
-    public void initProfile(Profile profile, Player player) {
+    public void initProfile(ProfileImpl profile, Player player) {
         profile.initialize(this,player);
         //Events.call(new AchivementPlayerLoadedEvent(player,profile));
     }
 
     @Override
-    public void unloadProfile(Profile profile, Player player) {}
+    public void unloadProfile(ProfileImpl profile, Player player) {}
 
     public void reloadAllAchievements() {
         this.getKnownProfiles().forEach(profile -> profile.rebuildAchievements());
