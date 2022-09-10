@@ -124,10 +124,6 @@ public class ProfileImpl implements AchievementProfile,io.lumine.mythic.bukkit.u
     }
     
     public void completeAchievement(Achievement achieve, boolean giveRewards) {
-        if(!achievementProgress.containsKey(achieve.getKey())) {
-            return;
-        }
-        
         final var completed = new CompletedAchievement(achieve);
         
         achievementProgress.remove(achieve.getKey());
