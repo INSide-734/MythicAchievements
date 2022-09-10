@@ -93,12 +93,12 @@ public class MythicAchievementsPlugin extends LuminePlugin {
          * Plugin Components
          */
 
-        volatileCodeHandler = getVolatileCodeHandler();
+        //volatileCodeHandler = getVolatileCodeHandler();
         compatibility = new CompatibilityManager(this);
         
         achievementManager = new AchievementsExecutor(this);
         
-        profiles = new ProfileManager(this);
+        profiles = new ProfileManager(this); 
         
         menuManager = new MenuManager(this);
         
