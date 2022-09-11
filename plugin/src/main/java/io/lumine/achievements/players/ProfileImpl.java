@@ -11,9 +11,11 @@ import io.lumine.achievements.constants.Constants;
 import io.lumine.achievements.storage.sql.SqlStorage;
 import io.lumine.achievements.storage.sql.jooq.Keys;
 import io.lumine.achievements.storage.sql.jooq.tables.records.ProfileRecord;
+import io.lumine.mythic.bukkit.utils.Schedulers;
 import io.lumine.mythic.bukkit.utils.logging.Log;
 import lombok.Getter;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.google.common.collect.Maps;
@@ -231,7 +233,12 @@ public class ProfileImpl implements AchievementProfile,io.lumine.mythic.bukkit.u
                 
                 if(adv != null) {
                     final var progress = player.getAdvancementProgress(adv);
-                    progress.awardCriteria(Constants.CRITERIA_KEY);
+                    
+                    if(Bukkit.isPrimaryThread()) {
+                        progress.awardCriteria(Constants.CRITERIA_KEY);
+                    } else {
+                        Schedulers.sync().run(() -> progress.awardCriteria(Constants.CRITERIA_KEY));
+                    }
                 }
             }
             for(var achieve : cat.getBaseAchievements()) {
@@ -242,6 +249,7 @@ public class ProfileImpl implements AchievementProfile,io.lumine.mythic.bukkit.u
     }
     
     private void subscribedOrCompleted(Achievement achieve) {
+
         //Log.info("SubComp achievement {0}", achieve.getKey());
         if(hasCompleted(achieve)) {
             //Log.info("Completing achievement {0}", achieve.getKey());
@@ -250,9 +258,14 @@ public class ProfileImpl implements AchievementProfile,io.lumine.mythic.bukkit.u
             if(adv != null) {
                 //Log.info("Completing achievement progress {0}", achieve.getKey());
                 final var progress = player.getAdvancementProgress(adv);
-                progress.awardCriteria(Constants.CRITERIA_KEY);
+                
+                if(Bukkit.isPrimaryThread()) {
+                    progress.awardCriteria(Constants.CRITERIA_KEY);
+                } else {
+                    Schedulers.sync().run(() -> progress.awardCriteria(Constants.CRITERIA_KEY));
+                }
             }
-            
+
             for(var child : achieve.getChildren()) {
                 subscribedOrCompleted(child);
             }
