@@ -6,6 +6,8 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
+import io.lumine.mythic.api.skills.ThreadSafetyLevel;
+
 import org.bukkit.entity.Player;
 
 public class GrantAchievementMechanic implements ITargetedEntitySkill {
@@ -39,5 +41,10 @@ public class GrantAchievementMechanic implements ITargetedEntitySkill {
         profile.completeAchievement(achieve, giveRewards);
 
         return SkillResult.SUCCESS;
+    }
+    
+    @Override
+    public ThreadSafetyLevel getThreadSafetyLevel() {
+        return ThreadSafetyLevel.SYNC_ONLY;
     }
 }

@@ -8,6 +8,8 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
+import io.lumine.mythic.api.skills.ThreadSafetyLevel;
+
 import org.bukkit.entity.Player;
 
 public class IncrementAchievementMechanic implements ITargetedEntitySkill {
@@ -56,5 +58,10 @@ public class IncrementAchievementMechanic implements ITargetedEntitySkill {
             profile.incrementAchievementStat(achieve, manualCriteria, amount);
         }
         return SkillResult.SUCCESS;
+    }
+    
+    @Override
+    public ThreadSafetyLevel getThreadSafetyLevel() {
+        return ThreadSafetyLevel.SYNC_ONLY;
     }
 }
