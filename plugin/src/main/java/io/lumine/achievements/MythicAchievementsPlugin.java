@@ -219,7 +219,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
             return split[1];
         } else if(split.length == 3)    {
             return split[2];
-        } else  {
+        } else  { 
             return "????";
         }
     }
