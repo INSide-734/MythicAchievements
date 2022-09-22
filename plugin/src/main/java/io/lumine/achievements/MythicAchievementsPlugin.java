@@ -200,7 +200,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
         this.volatileCodeHandler = VCH;
         return VCH;
     }
-    
+   
     /**
      * Returns the plugin version
      * @return int
