@@ -37,7 +37,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
     
     @Getter private BaseCommand baseCommand;
     @Getter private AdminCommand adminCommand;
-   
+  
     @Getter private AchievementsExecutor achievementManager;
 
     private VolatileCodeHandler volatileCodeHandler;
