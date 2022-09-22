@@ -31,7 +31,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
     @Getter private Configuration configuration;
     @Getter private CompatibilityManager compatibility;
     @Getter private WorldGuardSupport worldGuardSupport;
-    
+
     @Getter private ProfileManager profiles;
     @Getter private MenuManager menuManager;
     
