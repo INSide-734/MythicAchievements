@@ -212,7 +212,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
     /**
      * Returns the development build version
      * @return int
-     */
+     */ 
     public String getBuildNumber()  {
         final String[] split = this.getDescription().getVersion().split("-");
         if(split.length == 2)   {
