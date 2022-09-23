@@ -45,6 +45,7 @@ public class AdvancementWrapper {
         private String title;
         private String description;
         private String frame;
+        private boolean show_toast;
         private boolean announce_to_chat;
         
         public MythicAdvancementDisplay(AchievementImpl achieve) {

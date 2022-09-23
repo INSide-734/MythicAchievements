@@ -39,6 +39,8 @@ public class AdvancementCategoryWrapper {
         private String description;        
         private String background;
         private String frame;
+        private boolean show_toast = false;
+        private boolean announce_to_chat = false;
         
         public MythicAdvancementDisplay(AchievementCategoryImpl category) {
             this.icon = new MythicAdvancementIcon(category);
