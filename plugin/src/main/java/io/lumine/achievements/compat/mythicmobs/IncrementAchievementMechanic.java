@@ -1,6 +1,7 @@
 package io.lumine.achievements.compat.mythicmobs;
 
 import io.lumine.achievements.MythicAchievementsPlugin;
+import io.lumine.achievements.achievement.Criteria;
 import io.lumine.achievements.achievement.criteria.ManualCriteria;
 import io.lumine.achievements.api.achievements.AchievementCriteria;
 import io.lumine.mythic.api.adapters.AbstractEntity;
@@ -39,9 +40,7 @@ public class IncrementAchievementMechanic implements ITargetedEntitySkill {
         }
         
         var achieve = maybeAchieve.get();
-        
         var player = (Player) abstractEntity.getBukkitEntity();
-        var profile = plugin.getProfiles().getProfile(player);
 
         AchievementCriteria found = null;
         for(var criteria : achieve.getCriteria()) {
@@ -53,10 +52,15 @@ public class IncrementAchievementMechanic implements ITargetedEntitySkill {
         if(found == null) {
             return SkillResult.INVALID_CONFIG;
         }
-        
+
         if(found instanceof ManualCriteria manualCriteria) {
-            profile.incrementAchievementStat(achieve, manualCriteria, amount);
+            if(manualCriteria.checkConditions(player)) {
+                manualCriteria.incrementStat(player);
+            }
+        } else {
+            ((Criteria) found).incrementStat(player);
         }
+
         return SkillResult.SUCCESS;
     }
     

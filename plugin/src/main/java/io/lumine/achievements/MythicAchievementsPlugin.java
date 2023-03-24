@@ -40,7 +40,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
  
     @Getter private AchievementsExecutor achievementManager;
 
-    private VolatileCodeHandler volatileCodeHandler;
+    //private VolatileCodeHandler volatileCodeHandler;
 
     /*
      * Other Shit
@@ -174,7 +174,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
     /**
      * Grabs the active VolatileCodeHandler for the current version of Minecraft
      * @return {@link VolatileCodeHandler}
-     */
+     *
     public VolatileCodeHandler getVolatileCodeHandler()  {
         if(this.volatileCodeHandler != null) return this.volatileCodeHandler;
         
@@ -199,7 +199,7 @@ public class MythicAchievementsPlugin extends LuminePlugin {
         }
         this.volatileCodeHandler = VCH;
         return VCH;
-    }
+    } */
 
     /**
      * Returns the plugin version

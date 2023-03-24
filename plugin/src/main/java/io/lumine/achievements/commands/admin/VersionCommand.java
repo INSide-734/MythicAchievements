@@ -24,7 +24,7 @@ public class VersionCommand extends Command<MythicAchievementsPlugin> {
     public boolean onCommand(CommandSender sender, String[] args) {
         final String devBuilds = getPlugin().getDescription().getVersion().contains("SNAPSHOT") ? "&aYes" : "&aNo";
         final String preBuilds = getPlugin().isPremium() ? "&aYes" : "&cNo";
-        final String supported = (getPlugin().getVolatileCodeHandler() instanceof VolatileCodeDisabled) ? "&cNo" : "&aYes";
+        //final String supported = (getPlugin().getVolatileCodeHandler() instanceof VolatileCodeDisabled) ? "&cNo" : "&aYes";
         
         String extraInfo = "";
 
@@ -38,7 +38,7 @@ public class VersionCommand extends Command<MythicAchievementsPlugin> {
             ColorString.get("&6Plugin Build&f: " + getPlugin().getBuildNumber()),
             ColorString.get("&6Is Premium&f: " + preBuilds),
             ColorString.get("&6Is Dev Build&f: " + devBuilds),
-            ColorString.get("&6Supported Version&f: " + supported),
+            //ColorString.get("&6Supported Version&f: " + supported),
         };
         CommandHelper.sendCommandMessage(sender, messages);
 
