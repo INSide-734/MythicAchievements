@@ -80,46 +80,18 @@ public class LumineCoreCompat {
         }
 
         public boolean saveSync(UUID key, ProfileImpl profile) {
-            File file = getFile(key.toString());
-
-            if(!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                return false;
-            }
-
-        try(
-        FileWriter writer = new FileWriter(file)) {
-            GsonProvider.standard().toJson(profile, writer);
             return true;
-        } catch(IOException e) {
-            Log.severe("Failed to save Json Profile in: " + this.getClass().getName());
-            e.printStackTrace();
         }
-        return false;
-
     }
-
-    protected File getFile(String key) {
-        return new File(plugin.getDataFolder() + "/data", key + ".json");
-    }
-
 
     private Optional<ProfileImpl> getFromCoreProfile(PlayerProfile coreProfile) {
-            var maybeProfile = coreProfile.getMetadata("MCCOSMETICS", ProfileImpl.class);
-            
-            if(maybeProfile.isPresent()) {
-                return Optional.of(maybeProfile.get());
-            } else {
-                return Optional.empty();
-            }
+        var maybeProfile = coreProfile.getMetadata("MYTHICACHIEVEMENTS", ProfileImpl.class);
+
+        if(maybeProfile.isPresent()) {
+            return Optional.of(maybeProfile.get());
+        } else {
+            return Optional.empty();
         }
-
-
     }
-    
+
 }
