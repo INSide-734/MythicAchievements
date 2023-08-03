@@ -14,7 +14,7 @@
   
 	<properties>  
 	    <mythicachievements.version>1.0.0-SNAPSHOT</mythicachievements.version>
-	    <paperapi.version>1.19-R0.1-SNAPSHOT</paperapi.version>
+	    <paperapi.version>1.20.1-R0.1-SNAPSHOT</paperapi.version>
 	    <mythic.version>5.4.0-SNAPSHOT</mythic.version>
 	    <lombok.version>1.18.22</lombok.version>
     	<!--suppress UnresolvedMavenProperty -->
@@ -31,7 +31,6 @@
 	<modules>
 	    <module>api</module>
         <module>plugin</module>
-        <!-- <module>v1_19_R1</module> -->
         <module>dist</module>
         <module>dist-premium</module>
 	</modules>

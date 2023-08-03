@@ -4,7 +4,7 @@
     <artifactId>MythicAchievements</artifactId>
 
     <name>MythicAchievements</name> 
-    <description>A plugin for creating insane cosmetics.</description>
+    <description>A plugin for creating insane achievements.</description>
     <parent>
         <groupId>io.lumine</groupId>
         <artifactId>MythicAchievements-Plugin</artifactId>
