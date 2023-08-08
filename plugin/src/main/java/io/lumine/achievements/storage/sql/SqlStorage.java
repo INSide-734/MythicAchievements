@@ -45,7 +45,7 @@ public class SqlStorage<MythicAchievements,ProfileImpl> extends SqlPlayerStorage
     }
 
     @Override
-    public Promise<Optional<io.lumine.achievements.players.ProfileImpl>> load(final UUID uuid) {
+    public Promise<Optional<io.lumine.achievements.players.ProfileImpl>> load(final UUID uuid, int subProfile) {
         return Promise.supplyingDelayedAsync(() -> {
             var connection = getConnector().open();
 
@@ -57,7 +57,7 @@ public class SqlStorage<MythicAchievements,ProfileImpl> extends SqlPlayerStorage
                 return Optional.empty();
             }
             
-            var profile = manager.createProfile(UUID.fromString(fetchProfile.getUuid()), fetchProfile.getName());
+            var profile = manager.createProfile(UUID.fromString(fetchProfile.getUuid()), fetchProfile.getName(), subProfile);
 
             profile.loadFromSql(fetchProfile);
             
@@ -66,7 +66,7 @@ public class SqlStorage<MythicAchievements,ProfileImpl> extends SqlPlayerStorage
     }
 
     @Override
-    public Promise<Optional<io.lumine.achievements.players.ProfileImpl>> loadByName(String name) {
+    public Promise<Optional<io.lumine.achievements.players.ProfileImpl>> loadByName(String name, int subProfile) {
         return Promise.supplyingAsync(() -> {
             var connection = getConnector().open();
 
@@ -78,7 +78,7 @@ public class SqlStorage<MythicAchievements,ProfileImpl> extends SqlPlayerStorage
                 return Optional.empty();
             }
             
-            var profile = manager.createProfile(UUID.fromString(fetchProfile.getUuid()), fetchProfile.getName());
+            var profile = manager.createProfile(UUID.fromString(fetchProfile.getUuid()), fetchProfile.getName(), subProfile);
 
             profile.loadFromSql(fetchProfile);
             

@@ -35,7 +35,7 @@ public class ProfileManager extends PlayerRepository<MythicAchievementsPlugin,Pr
     }
 
     @Override
-    public ProfileImpl createProfile(UUID id, String name) {
+    public ProfileImpl createProfile(UUID id, String name, int subProfileOffset) {
         return new ProfileImpl(id,name);
     }
 

@@ -46,12 +46,12 @@ public class LumineCoreCompat {
         public void unload() {}
         
         @Override
-        public Promise<Optional<ProfileImpl>> load(UUID uuid) {
+        public Promise<Optional<ProfileImpl>> load(UUID uuid, int subProfileOffset) {
             final Promise<Optional<ProfileImpl>> promise = Promise.empty();
 
             core.getProfiles().getProfile(uuid).thenAcceptAsync(maybeCoreProfile -> {
                 if(maybeCoreProfile.isPresent()) {
-                    promise.supply(getFromCoreProfile(maybeCoreProfile.get()));
+                    promise.supply(getFromCoreProfile(maybeCoreProfile.get(), subProfileOffset));
                 } else {
                     promise.supply(Optional.empty());
                 }
@@ -60,12 +60,12 @@ public class LumineCoreCompat {
         }
 
         @Override
-        public Promise<Optional<ProfileImpl>> loadByName(String name) {
+        public Promise<Optional<ProfileImpl>> loadByName(String name, int subProfileOffset) {
             final Promise<Optional<ProfileImpl>> promise = Promise.empty();
 
             core.getProfiles().getProfile(name).thenAcceptAsync(maybeCoreProfile -> {
                 if(maybeCoreProfile.isPresent()) {
-                    promise.supply(getFromCoreProfile(maybeCoreProfile.get()));
+                    promise.supply(getFromCoreProfile(maybeCoreProfile.get(), subProfileOffset));
                 } else {
                     promise.supply(Optional.empty());
                 }
@@ -84,8 +84,10 @@ public class LumineCoreCompat {
         }
     }
 
-    private Optional<ProfileImpl> getFromCoreProfile(PlayerProfile coreProfile) {
-        var maybeProfile = coreProfile.getMetadata("MYTHICACHIEVEMENTS", ProfileImpl.class);
+    private Optional<ProfileImpl> getFromCoreProfile(PlayerProfile coreProfile, int subProfileOffset) {
+        String profileKey = (subProfileOffset == 0) ? "MYTHICACHIEVEMENTS" : "MYTHICACHIEVEMENTS-" + subProfileOffset;
+
+        var maybeProfile = coreProfile.getMetadata(profileKey, ProfileImpl.class);
 
         if(maybeProfile.isPresent()) {
             return Optional.of(maybeProfile.get());
